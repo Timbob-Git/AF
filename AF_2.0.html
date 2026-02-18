@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AF - Awesome Foursome</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.08) 0%, transparent 50%);
+            animation: pulse 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .setup-screen, .game-screen {
+            display: none;
+        }
+
+        .setup-screen.active, .game-screen.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            letter-spacing: 8px;
+            background: linear-gradient(90deg, #ff0080, #00ffff, #ff0080);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s linear infinite;
+            text-transform: uppercase;
+        }
+
+        .neon-logo {
+            font-size: 8rem;
+            font-weight: 400;
+            font-family: 'Bungee Shade', sans-serif;
+            letter-spacing: -8px;
+            text-align: center;
+            margin: 2rem auto 1rem;
+            color: #00ffff;
+            text-shadow: 
+                0 0 7.5px rgba(0, 255, 255, 0.45),
+                0 0 15px rgba(0, 255, 255, 0.3),
+                0 0 30px rgba(0, 255, 255, 0.15);
+        }
+
+        /* Mobile optimization for 1440x3120 screens */
+        @media (max-width: 1500px) and (min-height: 2500px) {
+            .neon-logo {
+                font-size: 14rem;
+                margin: 8rem auto 4rem;
+            }
+
+            .start-screen {
+                padding: 4rem 2rem;
+            }
+
+            button {
+                font-size: 1.4rem;
+                padding: 28px 50px;
+                border-radius: 25px;
+            }
+
+            .button-row {
+                gap: 25px;
+                flex-direction: column;
+            }
+
+            .dare-card {
+                padding: 80px 60px;
+                min-height: 600px;
+            }
+
+            .dare-text {
+                font-size: clamp(1.5rem, 5vw, 3rem);
+            }
+
+            .intensity-selector {
+                gap: 20px;
+            }
+
+            .intensity-btn {
+                padding: 22px 35px;
+                font-size: 1.2rem;
+            }
+
+            .corner-btn {
+                padding: 14px 20px !important;
+                font-size: 0.9rem !important;
+                min-width: 80px;
+            }
+
+            .timer-btn {
+                padding: 14px 18px !important;
+                font-size: 0.85rem !important;
+            }
+
+            .timer-strip {
+                padding: 10px 14px;
+                gap: 8px;
+            }
+
+            .timer-display {
+                font-size: 1.1rem;
+                min-width: 60px;
+            }
+
+            .timer-buttons {
+                gap: 6px;
+            }
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .welcome-text {
+            font-size: 1rem;
+            margin-bottom: 3rem;
+            color: #00ffff;
+            line-height: 1.6;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ff0080;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: #00ffff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            color: #00ffff;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        button {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #ff0080, #ff4da6);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(255, 0, 128, 0.8);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(20, 20, 20, 0.6);
+            border: 2px solid rgba(255, 0, 128, 0.4);
+            color: #ff0080;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 0, 128, 0.1);
+            border-color: #ff0080;
+            box-shadow: 0 0 30px rgba(255, 0, 128, 0.4);
+        }
+
+        .participants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .participant-input {
+            padding: 12px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .challenge-list {
+            margin-top: 2rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .challenge-item {
+            background: rgba(20, 20, 20, 0.8);
+            border: 2px solid rgba(255, 0, 128, 0.3);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .challenge-info {
+            flex: 1;
+        }
+
+        .challenge-intensity {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            color: #00ffff;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ff0044, #ff4466);
+            color: white;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            box-shadow: 0 0 20px rgba(255, 0, 68, 0.4);
+        }
+
+        .btn-delete:hover {
+            box-shadow: 0 0 35px rgba(255, 0, 68, 0.6);
+        }
+
+        .dare-card {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 0, 128, 0.3);
+            padding: 60px 60px;
+            border-radius: 25px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 60px rgba(255, 0, 128, 0.25),
+                        inset 0 0 40px rgba(0, 255, 255, 0.05);
+            position: relative;
+            height: 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .dare-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .dare-text {
+            font-size: clamp(1rem, 3.5vw, 2.2rem);
+            line-height: 1.8;
+            margin: 1rem 0;
+            color: #f0f0f0;
+            font-weight: 300;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .participants-turn {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
+        .corner-btn {
+            padding: 10px 16px !important;
+            font-size: 0.75rem !important;
+            border-radius: 12px !important;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        .corner-btn:hover {
+            opacity: 1;
+        }
+
+        @keyframes neonFlash {
+            0% {
+                opacity: 1;
+                filter: blur(0px) brightness(1);
+                text-shadow: 
+                    0 0 5px rgba(255, 0, 128, 0.3),
+                    0 0 10px rgba(255, 0, 128, 0.2);
+            }
+            15% {
+                opacity: 0.7;
+                filter: blur(3px) brightness(1.5);
+                text-shadow: 
+                    0 0 30px rgba(255, 0, 128, 0.8),
+                    0 0 60px rgba(0, 255, 255, 0.6),
+                    0 0 90px rgba(255, 0, 128, 0.4);
+            }
+            50% {
+                opacity: 0;
+                filter: blur(8px) brightness(2);
+                text-shadow: 
+                    0 0 50px rgba(255, 0, 128, 1),
+                    0 0 100px rgba(0, 255, 255, 0.8);
+                transform: scale(0.95);
+            }
+            51% {
+                opacity: 0;
+                filter: blur(8px) brightness(2);
+                transform: scale(1.05);
+            }
+            70% {
+                opacity: 0.5;
+                filter: blur(4px) brightness(1.8);
+                text-shadow: 
+                    0 0 40px rgba(0, 255, 255, 0.9),
+                    0 0 80px rgba(255, 0, 128, 0.7);
+            }
+            85% {
+                opacity: 0.9;
+                filter: blur(1px) brightness(1.2);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0px) brightness(1);
+                text-shadow: 
+                    0 0 5px rgba(255, 0, 128, 0.3),
+                    0 0 10px rgba(255, 0, 128, 0.2);
+                transform: scale(1);
+            }
+        }
+
+        .dare-text.animating {
+            animation: neonFlash 2s ease-in-out;
+        }
+
+        .participants-turn.animating {
+            animation: neonFlash 2s ease-in-out;
+        }
+
+        @keyframes cardFlash {
+            0% {
+                box-shadow: 0 0 40px rgba(255, 0, 128, 0.2),
+                            inset 0 0 40px rgba(0, 255, 255, 0.05);
+            }
+            50% {
+                box-shadow: 0 0 120px rgba(255, 0, 128, 0.8),
+                            0 0 200px rgba(0, 255, 255, 0.6),
+                            inset 0 0 80px rgba(255, 0, 128, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 60px rgba(255, 0, 128, 0.25),
+                            inset 0 0 40px rgba(0, 255, 255, 0.05);
+            }
+        }
+
+        .dare-card.flashing {
+            animation: cardFlash 2s ease-in-out;
+        }
+
+        .timer-strip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin-top: 0.5rem;
+        }
+
+        .timer-display {
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+            min-width: 55px;
+        }
+
+        .timer-buttons {
+            display: flex;
+            gap: 6px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        .timer-btn {
+            padding: 6px 10px !important;
+            font-size: 0.75rem !important;
+            border-radius: 10px !important;
+            letter-spacing: 1px;
+        }
+
+        .intensity-level {
+            font-size: 0.9rem;
+            color: #00ffff;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+            font-weight: 700;
+        }
+
+        .intensity-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff0080, #ff4da6);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.6);
+            text-transform: uppercase;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .intensity-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .intensity-btn {
+            padding: 10px 20px;
+            background: rgba(20, 20, 20, 0.6);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            color: #00ffff;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .intensity-btn:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .intensity-btn.active {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #00ffff;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-screen.active {
+            display: block;
+        }
+
+        .participant-detail-card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 2px solid rgba(255, 0, 128, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .participant-detail-card h3 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: #ff0080;
+        }
+
+        .checkbox-group {
+            margin-top: 1rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .checkbox-label:hover {
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #00ffff;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 0.5rem;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .radio-label input[type="radio"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #ff0080;
+        }
+
+        .stats-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .stats-content {
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid rgba(255, 0, 128, 0.4);
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 60px rgba(255, 0, 128, 0.4);
+        }
+
+        .stats-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 4px;
+            color: #ff0080;
+            text-shadow: 0 0 20px rgba(255, 0, 128, 0.8);
+        }
+
+        .stats-section {
+            margin-bottom: 2rem;
+        }
+
+        .stats-section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+        }
+
+        .stat-item {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-count {
+            background: rgba(255, 0, 128, 0.3);
+            border: 1px solid rgba(255, 0, 128, 0.5);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: #ff0080;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div class="start-screen active">
+            <div class="neon-logo">AF</div>
+            <div class="button-row" id="startButtons">
+                <button onclick="showSetup()">SETUP GAME</button>
+                <button onclick="quickStart()" class="btn-secondary">PLAY NOW</button>
+            </div>
+        </div>
+
+        <!-- Setup Screen -->
+        <div class="setup-screen">
+            <h1>SETUP</h1>
+            <button id="backToGameBtn" onclick="returnToGame()" class="btn-secondary" style="display: none; width: 100%; margin-bottom: 1.5rem; border-color: rgba(0,255,255,0.4); color: #00ffff;">← BACK TO GAME</button>
+            
+            <div class="input-group">
+                <label>CHALLENGE DESCRIPTION</label>
+                <textarea id="challengeDesc" placeholder="Enter the dare or challenge..."></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>INTENSITY LEVEL</label>
+                <select id="intensityLevel">
+                    <option value="1">1 - Icebreaker</option>
+                    <option value="2">2 - Flirty</option>
+                    <option value="3">3 - Foreplay</option>
+                    <option value="4">4 - Intimate</option>
+                    <option value="5">5 - Full On</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>NUMBER OF PARTICIPANTS</label>
+                <select id="participantCount">
+                    <option value="1">1 Person (Solo)</option>
+                    <option value="2" selected>2 People</option>
+                    <option value="3">3 People</option>
+                    <option value="4">4 People</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>GENDER MIX</label>
+                <select id="genderMix">
+                    <option value="any">Any</option>
+                    <option value="same">Same Gender Only</option>
+                    <option value="different">Different Genders Only</option>
+                    <option value="male-only">Male Only</option>
+                    <option value="female-only">Female Only</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>CLOTHING LEVEL</label>
+                <select id="clothingLevel">
+                    <option value="1">1 - Fully Clothed</option>
+                    <option value="2">2 - Underwear</option>
+                    <option value="3">3 - Naked</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>CHALLENGE IMAGE (OPTIONAL)</label>
+                <input type="file" id="challengeImage" accept="image/*">
+            </div>
+
+            <div class="button-row">
+                <button onclick="addChallenge()">ADD CHALLENGE</button>
+                <button onclick="cancelEdit()" class="btn-secondary" id="cancelEditBtn" style="display: none;">CANCEL</button>
+            </div>
+
+            <div id="deleteCurrentBtn" style="display: none; margin-top: 1rem;">
+                <button onclick="deleteCurrentDare()" style="width: 100%; background: linear-gradient(135deg, #ff0044, #ff4466); box-shadow: 0 0 20px rgba(255,0,68,0.4);">🗑 DELETE THIS DARE</button>
+            </div>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #3a3a3a;">
+                <h3 style="font-weight: 300; margin-bottom: 1rem; font-size: 1.1rem; letter-spacing: 1px;">IMPORT/EXPORT</h3>
+                <div class="button-row">
+                    <button onclick="exportChallenges()" class="btn-secondary">EXPORT JSON</button>
+                    <button onclick="document.getElementById('importFile').click()" class="btn-secondary">IMPORT JSON</button>
+                </div>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importChallenges(event)">
+            </div>
+
+            <div class="challenge-list" id="challengeList"></div>
+
+            <div class="button-row" style="margin-top: 2rem;">
+                <button onclick="showStart()" class="btn-secondary">BACK</button>
+                <button onclick="startGame()">CONTINUE TO GAME</button>
+            </div>
+        </div>
+
+        <!-- Participants Name Setup -->
+        <div id="participantsNameSetup" style="display: none;">
+            <h1>PARTICIPANTS</h1>
+            <p class="welcome-text">Enter 2-4 names</p>
+            
+            <div class="participants-grid">
+                <input type="text" class="participant-input" placeholder="Name 1" value="Tim">
+                <input type="text" class="participant-input" placeholder="Name 2" value="Troy">
+                <input type="text" class="participant-input" placeholder="Name 3" value="Emma">
+                <input type="text" class="participant-input" placeholder="Name 4" value="Rachel">
+            </div>
+
+            <div class="button-row">
+                <button onclick="showStart()" class="btn-secondary">BACK</button>
+                <button onclick="showParticipantDetails()">NEXT</button>
+            </div>
+        </div>
+
+        <!-- Participants Details Setup -->
+        <div id="participantsDetailSetup" style="display: none;">
+            <h1>PARTICIPANT DETAILS</h1>
+            <div id="participantDetailsForms"></div>
+
+            <div class="button-row" style="margin-top: 2rem;">
+                <button onclick="backToParticipantNames()" class="btn-secondary">BACK</button>
+                <button onclick="startGame()">START GAME</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen">
+
+            <!-- Top bar: Stats/Edit left, Exit right -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="showStats()" class="btn-secondary corner-btn">Stats</button>
+                    <button onclick="editCurrentDare()" class="btn-secondary corner-btn" id="editDareBtn" style="opacity: 0.3; pointer-events: none;">Edit</button>
+                </div>
+                <button onclick="showStart()" class="btn-secondary corner-btn">Exit</button>
+            </div>
+
+            <!-- DARE CARD - main hero -->
+            <div class="dare-card" style="position: relative; padding-bottom: 90px;">
+                <div id="clothingBadge" class="intensity-badge" style="left: 20px; right: auto; background: rgba(0, 255, 255, 0.15); border: 1px solid rgba(0, 255, 255, 0.4);">👔</div>
+                <div id="intensityBadge" class="intensity-badge">Level 1</div>
+                <div id="toyBadge" class="intensity-badge" style="display: none; right: auto; left: 80px;">🚀 TOY</div>
+                <img id="dareImage" class="dare-image" style="display: none;">
+                <p class="participants-turn" id="participantNames"></p>
+                <p class="dare-text" id="dareText">Click "Next Dare" to begin</p>
+
+                <!-- Timer fixed at absolute bottom of card -->
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 15px 40px; border-top: 1px solid rgba(255, 0, 128, 0.2); background: rgba(10, 10, 10, 0.5);">
+                    <div style="flex: 1;"></div>
+                    <div id="timerDisplay" style="font-size: 2rem; color: #00ffff; font-weight: 300; letter-spacing: 3px; text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);">00:00</div>
+                    <div style="display: flex; gap: 8px; flex: 1; justify-content: flex-end;">
+                        <button onclick="startDareTimer()" class="btn-secondary" id="startBtn" style="padding: 12px 16px; font-size: 1.2rem; border-radius: 12px;">▶</button>
+                        <button onclick="pauseDareTimer()" class="btn-secondary" id="pauseBtn" style="display: none; padding: 12px 16px; font-size: 1.2rem; border-radius: 12px;">⏸</button>
+                        <button onclick="restartDareTimer()" class="btn-secondary" id="restartBtn" style="padding: 12px 16px; font-size: 1.2rem; border-radius: 12px;">↻</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Dare - centred below card -->
+            <div style="text-align: center; margin-bottom: 0.75rem;">
+                <button onclick="selectNextParticipants()" id="nextDareBtn" style="font-size: 1.1rem; padding: 18px 60px; letter-spacing: 3px;">NEXT DARE</button>
+                <button onclick="revealDare()" id="showDareBtn" style="display: none; font-size: 1.1rem; padding: 18px 60px; letter-spacing: 3px; background: linear-gradient(135deg, #00ff88, #00ffdd); box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);">SHOW DARE</button>
+            </div>
+
+            <!-- Control row: clothing and intensity up/down -->
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button onclick="decreaseClothing()" class="btn-secondary corner-btn" id="clothingDownBtn" style="opacity: 0.3; pointer-events: none;">👗 ▼</button>
+                    <button onclick="increaseClothing()" class="btn-secondary corner-btn" id="clothingUpBtn">👗 ▲</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button onclick="decreaseIntensity()" class="btn-secondary corner-btn" id="lvlDownBtn" style="opacity: 0.3; pointer-events: none;">Lvl ▼</button>
+                    <button onclick="increaseIntensity()" class="btn-secondary corner-btn" id="lvlUpBtn">Lvl ▲</button>
+                </div>
+            </div>
+
+        <!-- Import Choice Modal -->
+        <div id="importModal" class="stats-modal" style="display: none;">
+            <div class="stats-content" style="max-width: 400px; text-align: center;">
+                <h2>IMPORT DARES</h2>
+                <p id="importCount" style="color: #00ffff; margin-bottom: 2rem; letter-spacing: 1px;"></p>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <button onclick="confirmImport('replace')" style="width: 100%;">REPLACE EXISTING</button>
+                    <button onclick="confirmImport('merge')" class="btn-secondary" style="width: 100%; border-color: rgba(0,255,255,0.4); color: #00ffff;">ADD TO EXISTING</button>
+                    <button onclick="closeImportModal()" class="btn-secondary" style="width: 100%; opacity: 0.6;">CANCEL</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Modal -->
+        <div id="statsModal" class="stats-modal" style="display: none;">
+            <div class="stats-content">
+                <h2>INTERACTION STATS</h2>
+                
+                <div class="stats-section">
+                    <h3>Individual Participation</h3>
+                    <div id="individualStats"></div>
+                </div>
+                
+                <div class="stats-section">
+                    <h3>Pair Interactions</h3>
+                    <div id="pairStats"></div>
+                </div>
+                
+                <button onclick="closeStats()" style="margin-top: 2rem;">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Version 2.0 - Stats tracking implemented
+        let challenges = [];
+        let participants = [];
+        let participantNames = [];
+        let currentIntensity = 1;
+
+        function increaseIntensity() {
+            if (currentIntensity < 5) {
+                currentIntensity++;
+                updateIntensityDisplay();
+                console.log(`[intensity] Manually increased to ${currentIntensity}`);
+            }
+        }
+
+        function decreaseIntensity() {
+            if (currentIntensity > 1) {
+                currentIntensity--;
+                updateIntensityDisplay();
+                console.log(`[intensity] Manually decreased to ${currentIntensity}`);
+            }
+        }
+
+        function updateIntensityDisplay() {
+            const downBtn = document.getElementById('lvlDownBtn');
+            const upBtn = document.getElementById('lvlUpBtn');
+            
+            // Disable down button if at minimum (1)
+            if (currentIntensity <= 1) {
+                downBtn.style.opacity = '0.3';
+                downBtn.style.pointerEvents = 'none';
+            } else {
+                downBtn.style.opacity = '1';
+                downBtn.style.pointerEvents = 'auto';
+            }
+            
+            // Disable up button if at max (5)
+            if (currentIntensity >= 5) {
+                upBtn.style.opacity = '0.3';
+                upBtn.style.pointerEvents = 'none';
+            } else {
+                upBtn.style.opacity = '1';
+                upBtn.style.pointerEvents = 'auto';
+            }
+        }
+        let currentClothingLevel = 1;
+        let usedChallenges = new Set();
+        let interactionTracker = {}; // Track pair interactions
+        let participationTracker = {}; // Track individual participation
+        let currentDareId = null; // Track currently displayed dare
+        let editingFromGame = false; // Track if we entered setup from game
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let timerDuration = 0; // Auto-assigned duration for current dare
+        let timerRunning = false;
+        let pendingChallenge = null; // Store challenge waiting to be revealed
+        let pendingParticipants = null; // Store selected participants
+        let pendingAssignments = null; // Store F1/F2/M1/M2 assignments
+
+        // Load challenges from localStorage on startup
+        function loadChallenges() {
+            const saved = localStorage.getItem('dareGameChallenges');
+            if (saved) {
+                challenges = JSON.parse(saved);
+            }
+        }
+
+        // Save challenges to localStorage
+        function saveChallenges() {
+            localStorage.setItem('dareGameChallenges', JSON.stringify(challenges));
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadChallenges();
+        });
+
+        // Debug helper - can be called from console
+        window.debugChallenges = function() {
+            console.log('Total challenges:', challenges.length);
+            console.log('All challenges:', challenges);
+            console.log('First challenge:', challenges[0]);
+            return challenges;
+        };
+
+        function highlightPlayerNames(text) {
+            let highlightedText = text;
+            // Highlight each participant's name with their color
+            participants.forEach(p => {
+                const regex = new RegExp(`\\b${p.name}\\b`, 'gi');
+                highlightedText = highlightedText.replace(regex, 
+                    `<span style="color: ${p.color}; font-weight: 600; text-shadow: 0 0 10px ${p.color}80;">${p.name}</span>`
+                );
+            });
+            return highlightedText;
+        }
+
+        function fitDareText() {
+            const card = document.querySelector('.dare-card');
+            const text = document.getElementById('dareText');
+            const participantsEl = document.getElementById('participantNames');
+            const intensityBadge = document.getElementById('intensityBadge');
+            const toyBadge = document.getElementById('toyBadge');
+            if (!card || !text) return;
+
+            // Get actual card dimensions
+            const cardStyle = window.getComputedStyle(card);
+            const cardHeight = card.clientHeight;
+            const paddingTop = parseFloat(cardStyle.paddingTop);
+            const paddingBottom = parseFloat(cardStyle.paddingBottom);
+            
+            // Account for all content that takes space
+            const participantsHeight = participantsEl ? participantsEl.offsetHeight : 0;
+            const badgeHeight = intensityBadge && intensityBadge.style.display !== 'none' ? 40 : 0;
+            // Timer is position:absolute at bottom, already accounted for by padding-bottom: 90px on card
+            
+            // Available space with safety margin
+            const available = cardHeight - paddingTop - paddingBottom - participantsHeight - badgeHeight - 40;
+
+            // Binary search for the largest font size that fits
+            let low = 0.8, high = 3.0;
+            for (let i = 0; i < 25; i++) {
+                const mid = (low + high) / 2;
+                text.style.fontSize = mid + 'rem';
+                if (text.scrollHeight <= available) {
+                    low = mid;
+                } else {
+                    high = mid;
+                }
+            }
+            // Apply with small buffer to ensure no overflow
+            text.style.fontSize = (low * 0.98) + 'rem';
+        }
+
+        window.debugParticipants = function() {
+            console.log('Total participants:', participants.length);
+            console.log('All participants:', participants);
+            participants.forEach((p, i) => {
+                console.log(`Participant ${i + 1}: Name="${p.name}", Gender="${p.gender}"`);
+            });
+            return participants;
+        };
+
+        window.debugDare = function(id) {
+            const dare = challenges.find(c => c.id == id);
+            if (!dare) { console.log('Dare not found:', id); return; }
+            console.log('Dare found:', dare);
+            return dare;
+        };
+
+        function showStats() {
+            // Generate individual stats
+            const individualHtml = Object.entries(participationTracker)
+                .sort((a, b) => b[1] - a[1])
+                .map(([name, count]) => `
+                    <div class="stat-item">
+                        <span>${name}</span>
+                        <span class="stat-count">${count} dare(s)</span>
+                    </div>
+                `).join('');
+            
+            document.getElementById('individualStats').innerHTML = individualHtml || '<p style="opacity: 0.5; text-align: center;">No data yet</p>';
+            
+            // Generate pair stats
+            const pairHtml = Object.entries(interactionTracker)
+                .sort((a, b) => b[1] - a[1])
+                .map(([key, count]) => {
+                    const [idx1, idx2] = key.split('-').map(Number);
+                    if (participants[idx1] && participants[idx2]) {
+                        return `
+                            <div class="stat-item">
+                                <span>${participants[idx1].name} & ${participants[idx2].name}</span>
+                                <span class="stat-count">${count} interaction(s)</span>
+                            </div>
+                        `;
+                    }
+                    return '';
+                }).join('');
+            
+            document.getElementById('pairStats').innerHTML = pairHtml || '<p style="opacity: 0.5; text-align: center;">No data yet</p>';
+            
+            // Show modal
+            document.getElementById('statsModal').style.display = 'flex';
+        }
+
+        function closeStats() {
+            document.getElementById('statsModal').style.display = 'none';
+        }
+
+        window.debugInteractions = function() {
+            console.log('Interaction tracker:', interactionTracker);
+            const stats = [];
+            participants.forEach((p1, i) => {
+                participants.forEach((p2, j) => {
+                    if (i < j) {
+                        const key = [i, j].sort().join('-');
+                        const count = interactionTracker[key] || 0;
+                        stats.push({
+                            pair: `${p1.name} & ${p2.name}`,
+                            interactions: count
+                        });
+                    }
+                });
+            });
+            stats.sort((a, b) => b.interactions - a.interactions);
+            console.table(stats);
+            return stats;
+        };
+
+        let editingChallengeId = null;
+
+        function editChallenge(id) {
+            const challenge = challenges.find(c => c.id === id);
+            if (!challenge) return;
+
+            // Populate the form with existing challenge data
+            document.getElementById('challengeDesc').value = challenge.description;
+            document.getElementById('intensityLevel').value = challenge.intensity;
+            document.getElementById('participantCount').value = challenge.participantCount || 2;
+            document.getElementById('genderMix').value = challenge.genderMix || 'any';
+            document.getElementById('clothingLevel').value = challenge.clothingLevel || 1;
+            
+            // Change button text to indicate editing
+            editingChallengeId = id;
+            updateAddButton();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateAddButton() {
+            const addButton = document.querySelector('button[onclick="addChallenge()"]');
+            const cancelBtn = document.getElementById('cancelEditBtn');
+            const deleteBtn = document.getElementById('deleteCurrentBtn');
+            if (editingChallengeId) {
+                addButton.textContent = 'UPDATE CHALLENGE';
+                addButton.style.background = 'linear-gradient(135deg, #00c853, #00e676)';
+                addButton.style.boxShadow = '0 0 20px rgba(0,200,83,0.4)';
+                cancelBtn.style.display = 'block';
+                if (deleteBtn) deleteBtn.style.display = 'block';
+            } else {
+                addButton.textContent = 'ADD CHALLENGE';
+                addButton.style.background = 'linear-gradient(135deg, #ff0080, #ff4da6)';
+                addButton.style.boxShadow = '0 0 30px rgba(255,0,128,0.5)';
+                cancelBtn.style.display = 'none';
+                if (deleteBtn) deleteBtn.style.display = 'none';
+            }
+        }
+
+        function deleteCurrentDare() {
+            if (!editingChallengeId) return;
+            // Use loose equality to handle string/number id mismatches
+            const before = challenges.length;
+            challenges = challenges.filter(c => c.id != editingChallengeId);
+            const after = challenges.length;
+            console.log(`[delete] Removed ${before - after} dare(s). editingChallengeId=${editingChallengeId}. Remaining: ${after}`);
+            saveChallenges();
+            // Verify save
+            const saved = JSON.parse(localStorage.getItem('dareGameChallenges') || '[]');
+            console.log(`[delete] Verified localStorage now has ${saved.length} dares`);
+            renderChallengeList();
+            editingChallengeId = null;
+            currentDareId = null;
+            editingFromGame = false;
+            updateAddButton();
+            returnToGame();
+        }
+
+        function cancelEdit() {
+            editingChallengeId = null;
+            document.getElementById('challengeDesc').value = '';
+            document.getElementById('challengeImage').value = '';
+            updateAddButton();
+            if (editingFromGame) returnToGame();
+        }
+
+        function exportChallenges() {
+            console.log('Export function called, challenges:', challenges);
+            if (challenges.length === 0) {
+                alert('No challenges to export');
+                return;
+            }
+
+            try {
+                const dataStr = JSON.stringify(challenges, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'dare-challenges.json';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                console.log('Export successful');
+            } catch (error) {
+                console.error('Export error:', error);
+                alert('Error exporting challenges: ' + error.message);
+            }
+        }
+
+        let pendingImport = null;
+
+        function importChallenges(event) {
+            console.log('Import function called');
+            const file = event.target.files[0];
+            if (!file) {
+                console.log('No file selected');
+                return;
+            }
+
+            console.log('File selected:', file.name);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    console.log('File content:', e.target.result);
+                    const imported = JSON.parse(e.target.result);
+                    
+                    if (!Array.isArray(imported)) {
+                        alert('Invalid JSON format. Expected an array of challenges.');
+                        return;
+                    }
+
+                    console.log('Parsed challenges:', imported);
+
+                    const valid = imported.every(c => 
+                        c.description && 
+                        typeof c.intensity === 'number' &&
+                        c.intensity >= 1 && c.intensity <= 5
+                    );
+
+                    if (!valid) {
+                        alert('Invalid challenge format. Each challenge needs: description, intensity (1-5)');
+                        return;
+                    }
+
+                    // Store pending import and show modal
+                    pendingImport = imported;
+                    document.getElementById('importCount').textContent = 
+                        `${imported.length} dare(s) found — ${challenges.length} currently loaded`;
+                    document.getElementById('importModal').style.display = 'flex';
+
+                } catch (error) {
+                    console.error('Import error:', error);
+                    alert('Error parsing JSON file: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function confirmImport(mode) {
+            if (!pendingImport) return;
+
+            // Auto-correct participantCount to match genderMix where mismatched
+            const corrected = pendingImport.map(c => {
+                if (c.genderMix && c.genderMix.includes('-')) {
+                    const expectedCount = c.genderMix.split('-').length;
+                    if (parseInt(c.participantCount) !== expectedCount) {
+                        console.warn(`[import fix] id=${c.id} genderMix="${c.genderMix}" participantCount ${c.participantCount} → ${expectedCount}`);
+                        return { ...c, participantCount: expectedCount };
+                    }
+                }
+                return c;
+            });
+
+            if (mode === 'replace') {
+                challenges = corrected;
+            } else {
+                corrected.forEach(c => {
+                    if (!c.id) c.id = Date.now() + Math.random();
+                    if (!challenges.find(existing => existing.id === c.id)) {
+                        challenges.push(c);
+                    }
+                });
+            }
+
+            saveChallenges();
+            renderChallengeList();
+            console.log(`Import (${mode}) successful. Total challenges:`, challenges.length);
+            closeImportModal();
+            alert(`✓ ${mode === 'replace' ? 'Replaced with' : 'Added'} ${corrected.length} dare(s). Total: ${challenges.length}`);
+            pendingImport = null;
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').style.display = 'none';
+            pendingImport = null;
+        }
+
+        function showStart() {
+            document.querySelector('.start-screen').classList.add('active');
+            document.querySelector('.setup-screen').classList.remove('active');
+            document.querySelector('.game-screen').classList.remove('active');
+            document.getElementById('participantsNameSetup').style.display = 'none';
+            document.getElementById('participantsDetailSetup').style.display = 'none';
+            document.getElementById('startButtons').style.display = 'flex';
+        }
+
+        function editCurrentDare() {
+            if (!currentDareId) return;
+            // Store that we came from game so we can return
+            editingFromGame = true;
+            // Navigate to setup screen with dare pre-loaded
+            document.querySelector('.game-screen').classList.remove('active');
+            document.querySelector('.setup-screen').classList.add('active');
+            editChallenge(currentDareId);
+            renderChallengeList();
+            // Show a return-to-game button
+            document.getElementById('backToGameBtn').style.display = 'inline-block';
+        }
+
+        function returnToGame() {
+            editingFromGame = false;
+            editingChallengeId = null;
+            updateAddButton();
+            document.querySelector('.setup-screen').classList.remove('active');
+            document.querySelector('.game-screen').classList.add('active');
+            document.getElementById('backToGameBtn').style.display = 'none';
+        }
+
+        function showSetup() {
+            editingFromGame = false;
+            document.querySelector('.start-screen').classList.remove('active');
+            document.querySelector('.setup-screen').classList.add('active');
+            document.getElementById('startButtons').style.display = 'none';
+            document.getElementById('backToGameBtn').style.display = 'none';
+            renderChallengeList();
+        }
+
+        function quickStart() {
+            document.querySelector('.start-screen').classList.remove('active');
+            document.getElementById('startButtons').style.display = 'none';
+            startGame();
+        }
+
+        function showParticipants() {
+            document.querySelector('.start-screen').classList.remove('active');
+            document.querySelector('.setup-screen').classList.remove('active');
+            document.getElementById('participantsNameSetup').style.display = 'block';
+        }
+
+        function showParticipantDetails() {
+            const inputs = document.querySelectorAll('.participant-input');
+            participantNames = Array.from(inputs)
+                .map(input => input.value.trim())
+                .filter(name => name !== '');
+
+            if (participantNames.length < 2) {
+                alert('Please enter at least 2 participants');
+                return;
+            }
+
+            document.getElementById('participantsNameSetup').style.display = 'none';
+            document.getElementById('participantsDetailSetup').style.display = 'block';
+            renderParticipantDetailsForm();
+        }
+
+        function backToParticipantNames() {
+            document.getElementById('participantsDetailSetup').style.display = 'none';
+            document.getElementById('participantsNameSetup').style.display = 'block';
+        }
+
+        function renderParticipantDetailsForm() {
+            const container = document.getElementById('participantDetailsForms');
+            container.innerHTML = participantNames.map((name, index) => `
+                <div class="participant-detail-card">
+                    <h3>${name}</h3>
+                    
+                    <div class="input-group">
+                        <label>GENDER</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="gender-${index}" value="Male" checked>
+                                Male
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="gender-${index}" value="Female">
+                                Female
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="gender-${index}" value="Other">
+                                Other
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>WILL INTERACT WITH</label>
+                        <div class="checkbox-group" id="interactions-${index}">
+                            ${participantNames.map((otherName, otherIndex) => {
+                                if (index === otherIndex) return '';
+                                return `
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" value="${otherIndex}" checked>
+                                        ${otherName}
+                                    </label>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addChallenge() {
+            const desc = document.getElementById('challengeDesc').value.trim();
+            const intensity = parseInt(document.getElementById('intensityLevel').value);
+            const participantCount = parseInt(document.getElementById('participantCount').value);
+            const genderMix = document.getElementById('genderMix').value;
+            const clothingLevel = parseInt(document.getElementById('clothingLevel').value);
+            const imageInput = document.getElementById('challengeImage');
+            
+            if (!desc) {
+                alert('Please enter a challenge description');
+                return;
+            }
+
+            if (editingChallengeId) {
+                // Update existing challenge
+                const challenge = challenges.find(c => c.id === editingChallengeId);
+                if (challenge) {
+                    challenge.description = desc;
+                    challenge.intensity = intensity;
+                    challenge.participantCount = participantCount;
+                    challenge.genderMix = genderMix;
+                    challenge.clothingLevel = clothingLevel;
+                    
+                    if (imageInput.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            challenge.image = e.target.result;
+                            saveChallenges();
+                            renderChallengeList();
+                            cancelEdit();
+                        };
+                        reader.readAsDataURL(imageInput.files[0]);
+                    } else {
+                        // Keep existing image if no new one uploaded
+                        saveChallenges();
+                        renderChallengeList();
+                        cancelEdit();
+                    }
+                }
+            } else {
+                // Add new challenge
+                const challenge = {
+                    id: Date.now(),
+                    description: desc,
+                    intensity: intensity,
+                    participantCount: participantCount,
+                    genderMix: genderMix,
+                    clothingLevel: clothingLevel,
+                    image: null
+                };
+
+                if (imageInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        challenge.image = e.target.result;
+                        challenges.push(challenge);
+                        saveChallenges();
+                        renderChallengeList();
+                    };
+                    reader.readAsDataURL(imageInput.files[0]);
+                } else {
+                    challenges.push(challenge);
+                    saveChallenges();
+                    renderChallengeList();
+                }
+
+                document.getElementById('challengeDesc').value = '';
+                document.getElementById('challengeImage').value = '';
+            }
+        }
+
+        function deleteChallenge(id) {
+            challenges = challenges.filter(c => c.id != id);
+            saveChallenges();
+            renderChallengeList();
+        }
+
+        function renderChallengeList() {
+            const list = document.getElementById('challengeList');
+            if (challenges.length === 0) {
+                list.innerHTML = '<p style="opacity: 0.5; text-align: center; padding: 20px;">No challenges added yet</p>';
+                return;
+            }
+
+            const clothingLabels = ['FC', 'UW', 'NK'];
+
+            list.innerHTML = challenges.map(c => `
+                <div class="challenge-item">
+                    <div class="challenge-info">
+                        ${c.description.substring(0, 50)}${c.description.length > 50 ? '...' : ''}
+                        <span class="challenge-intensity">Level ${c.intensity}</span>
+                        <span class="challenge-intensity">${c.participantCount || 2}p</span>
+                        <span class="challenge-intensity">${clothingLabels[(c.clothingLevel || 1) - 1]}</span>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="editChallenge(${c.id})">EDIT</button>
+                        <button class="btn-delete" onclick="deleteChallenge(${c.id})">DELETE</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function startGame() {
+            // Hardcoded participants
+            // Index: 0=Tim, 1=Troy, 2=Emma, 3=Rachel
+            participants = [
+                {
+                    name: 'Tim',
+                    gender: 'Male',
+                    interactions: [2, 3], // interacts with Emma(2), Rachel(3)
+                    color: '#00d4ff' // Cyan
+                },
+                {
+                    name: 'Troy',
+                    gender: 'Male',
+                    interactions: [2, 3], // interacts with Emma(2), Rachel(3)
+                    color: '#00ff88' // Green
+                },
+                {
+                    name: 'Emma',
+                    gender: 'Female',
+                    interactions: [0, 1, 3], // interacts with Tim(0), Troy(1), Rachel(3)
+                    color: '#ff1493' // Deep Hot Pink
+                },
+                {
+                    name: 'Rachel',
+                    gender: 'Female',
+                    interactions: [0, 1, 2], // interacts with Tim(0), Troy(1), Emma(2)
+                    color: '#e0b0ff' // Neon Lavender
+                }
+            ];
+
+            console.log('Hardcoded participants:', participants);
+
+            if (challenges.length === 0) {
+                alert('Please add some challenges first in the setup screen');
+                return;
+            }
+
+            usedChallenges.clear();
+            currentIntensity = 1;
+            currentClothingLevel = 1;
+            
+            // Initialize trackers
+            interactionTracker = {};
+            participationTracker = {};
+            participants.forEach(p => {
+                participationTracker[p.name] = 0;
+            });
+            
+            document.getElementById('participantsDetailSetup').style.display = 'none';
+            document.getElementById('participantsNameSetup').style.display = 'none';
+            document.querySelector('.game-screen').classList.add('active');
+            setIntensity(1);
+            setClothingLevel(1);
+            displayParticipantsList();
+        }
+
+        function displayParticipantsList() {
+            // Timer replaced the participants list display
+        }
+
+        function startDareTimer() {
+            if (timerRunning) return;
+            timerRunning = true;
+            
+            // Switch from duration text to countdown timer
+            updateTimerDisplay();
+            
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('pauseBtn').style.display = 'inline-block';
+            
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                
+                if (timerSeconds <= 0) {
+                    pauseDareTimer();
+                    flashTimer();
+                }
+            }, 1000);
+        }
+
+        function pauseDareTimer() {
+            timerRunning = false;
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('pauseBtn').style.display = 'none';
+        }
+
+        function restartDareTimer() {
+            pauseDareTimer();
+            timerSeconds = timerDuration;
+            
+            // Show duration text again when reset
+            const mins = timerDuration / 60;
+            document.getElementById('timerDisplay').textContent = `${mins} MIN`;
+            document.getElementById('timerDisplay').style.color = '#00ffff';
+            document.getElementById('timerDisplay').style.textShadow = '0 0 10px rgba(0, 255, 255, 0.6)';
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timerDisplay').textContent = display;
+            
+            // Change color when time is running out
+            const timerEl = document.getElementById('timerDisplay');
+            if (timerSeconds <= 10 && timerSeconds > 0) {
+                timerEl.style.color = '#ff4444';
+            } else {
+                timerEl.style.color = '#fff';
+            }
+        }
+
+        function flashTimer() {
+            const timerEl = document.getElementById('timerDisplay');
+            let flashCount = 0;
+            const flashInterval = setInterval(() => {
+                timerEl.style.color = flashCount % 2 === 0 ? '#ff4444' : '#fff';
+                flashCount++;
+                if (flashCount >= 6) {
+                    clearInterval(flashInterval);
+                    timerEl.style.color = '#fff';
+                }
+            }, 200);
+            
+            // Try to play a beep sound
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                console.log('Could not play sound');
+            }
+        }
+
+        function setIntensity(level) {
+            currentIntensity = level;
+            document.getElementById('currentIntensity').textContent = `INTENSITY LEVEL: ${level}`;
+            
+            document.querySelectorAll('.intensity-btn:not(.clothing-btn)').forEach((btn, index) => {
+                btn.classList.toggle('active', index + 1 === level);
+            });
+
+            usedChallenges.clear();
+        }
+
+        function setClothingLevel(level) {
+            currentClothingLevel = parseInt(level);
+            currentIntensity = 1;
+            usedChallenges.clear();
+            updateClothingDisplay();
+            updateIntensityDisplay();
+        }
+
+        function increaseClothing() {
+            if (currentClothingLevel < 3) {
+                setClothingLevel(currentClothingLevel + 1);
+            }
+        }
+
+        function decreaseClothing() {
+            if (currentClothingLevel > 1) {
+                setClothingLevel(currentClothingLevel - 1);
+            }
+        }
+
+        function updateClothingDisplay() {
+            const downBtn = document.getElementById('clothingDownBtn');
+            const upBtn = document.getElementById('clothingUpBtn');
+
+            downBtn.style.opacity = currentClothingLevel <= 1 ? '0.3' : '1';
+            downBtn.style.pointerEvents = currentClothingLevel <= 1 ? 'none' : 'auto';
+            upBtn.style.opacity = currentClothingLevel >= 3 ? '0.3' : '1';
+            upBtn.style.pointerEvents = currentClothingLevel >= 3 ? 'none' : 'auto';
+
+            // Update the badge on the card
+            const clothingIcons = { 1: '👔', 2: '👙', 3: 'N' };
+            const clothingBadge = document.getElementById('clothingBadge');
+            if (clothingBadge) {
+                clothingBadge.textContent = clothingIcons[currentClothingLevel] || '👔';
+                if (currentClothingLevel === 3) {
+                    clothingBadge.style.fontSize = '1.5rem';
+                    clothingBadge.style.fontWeight = '900';
+                    clothingBadge.style.color = '#ff0080';
+                } else {
+                    clothingBadge.style.fontSize = '1.2rem';
+                    clothingBadge.style.fontWeight = '400';
+                    clothingBadge.style.color = '#00ffff';
+                }
+            }
+        }
+
+        function selectNextParticipants() {
+            // Step 1: Select the dare
+            const clothingLevelNow = parseInt(currentClothingLevel);
+            console.log(`[selectNextParticipants] currentClothingLevel=${currentClothingLevel} parsed=${clothingLevelNow} currentIntensity=${currentIntensity}`);
+
+            const filterChallenges = (intensity) => {
+                const intensityNow = parseInt(intensity);
+                const all = challenges.filter(c => parseInt(c.clothingLevel || 1) === clothingLevelNow);
+                const byIntensity = all.filter(c => parseInt(c.intensity) === intensityNow);
+                const notUsed = byIntensity.filter(c => !usedChallenges.has(c.id));
+                console.log(`[filter] clothing=${clothingLevelNow} intensity=${intensityNow} | matchClothing=${all.length} matchIntensity=${byIntensity.length} notUsed=${notUsed.length}`);
+                return notUsed;
+            };
+
+            let availableChallenges = filterChallenges(currentIntensity);
+
+            while (availableChallenges.length === 0 && currentIntensity < 5) {
+                currentIntensity++;
+                usedChallenges.clear();
+                availableChallenges = filterChallenges(currentIntensity);
+                updateIntensityDisplay();
+                console.log(`[auto-increase] Intensity auto-increased to ${currentIntensity}`);
+            }
+
+            if (availableChallenges.length === 0) {
+                const messages = {
+                    1: "Remove your clothing down to underwear! 👙",
+                    2: "Get naked you sexy people! 🔥",
+                    3: "You've done it all... for now! 😈"
+                };
+                document.getElementById('dareText').innerHTML = messages[currentClothingLevel] || "No more challenges available!";
+                document.getElementById('dareImage').style.display = 'none';
+                document.getElementById('intensityBadge').style.display = 'none';
+                document.getElementById('toyBadge').style.display = 'none';
+                fitDareText();
+                return;
+            }
+
+            const pool = [...availableChallenges];
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+            const challenge = pool[0];
+            console.log(`[selected] id=${challenge.id} dare="${challenge.description}"`);
+            usedChallenges.add(challenge.id);
+
+            // Step 2: Parse placeholders from the dare text
+            const dareText = challenge.description;
+            const needsF1 = /<F1>|\bF1\b/.test(dareText);
+            const needsF2 = /<F2>|\bF2\b/.test(dareText);
+            const needsM1 = /<M1>|\bM1\b/.test(dareText);
+            const needsM2 = /<M2>|\bM2\b/.test(dareText);
+            
+            console.log('[placeholders needed]', { needsF1, needsF2, needsM1, needsM2 });
+
+            // Step 3: Assign SPECIFIC participants to SPECIFIC placeholders based on fairness
+            const assignments = {};
+            const selectedParticipants = [];
+            
+            const allFemales = participants.filter(p => p.gender === 'Female');
+            const allMales = participants.filter(p => p.gender === 'Male');
+            
+            // Assign F1 (least used female)
+            if (needsF1 && allFemales.length > 0) {
+                const leastUsedFemale = allFemales.sort((a, b) => 
+                    (participationTracker[a.name] || 0) - (participationTracker[b.name] || 0)
+                )[0];
+                assignments['F1'] = leastUsedFemale;
+                selectedParticipants.push(leastUsedFemale);
+            }
+            
+            // Assign F2 (least used female, different from F1)
+            if (needsF2 && allFemales.length > 0) {
+                const availableFemales = allFemales.filter(f => f !== assignments['F1']);
+                if (availableFemales.length > 0) {
+                    const leastUsedFemale = availableFemales.sort((a, b) => 
+                        (participationTracker[a.name] || 0) - (participationTracker[b.name] || 0)
+                    )[0];
+                    assignments['F2'] = leastUsedFemale;
+                    if (!selectedParticipants.includes(leastUsedFemale)) {
+                        selectedParticipants.push(leastUsedFemale);
+                    }
+                } else {
+                    // Only 1 female, use her for both
+                    assignments['F2'] = assignments['F1'];
+                }
+            }
+            
+            // Assign M1 (least used male)
+            if (needsM1 && allMales.length > 0) {
+                const leastUsedMale = allMales.sort((a, b) => 
+                    (participationTracker[a.name] || 0) - (participationTracker[b.name] || 0)
+                )[0];
+                assignments['M1'] = leastUsedMale;
+                selectedParticipants.push(leastUsedMale);
+            }
+            
+            // Assign M2 (least used male, different from M1)
+            if (needsM2 && allMales.length > 0) {
+                const availableMales = allMales.filter(m => m !== assignments['M1']);
+                if (availableMales.length > 0) {
+                    const leastUsedMale = availableMales.sort((a, b) => 
+                        (participationTracker[a.name] || 0) - (participationTracker[b.name] || 0)
+                    )[0];
+                    assignments['M2'] = leastUsedMale;
+                    if (!selectedParticipants.includes(leastUsedMale)) {
+                        selectedParticipants.push(leastUsedMale);
+                    }
+                } else {
+                    // Only 1 male, use him for both
+                    assignments['M2'] = assignments['M1'];
+                }
+            }
+
+            console.log('[assignments]', Object.fromEntries(
+                Object.entries(assignments).map(([k, v]) => [k, v.name])
+            ));
+            console.log('[selectedParticipants]', selectedParticipants.map(p => p.name));
+
+            // Assign timer duration NOW (before showing participants)
+            const durations = [60, 120, 180]; // 1min, 2min, 3min in seconds
+            timerDuration = durations[Math.floor(Math.random() * durations.length)];
+            timerSeconds = timerDuration;
+            
+            // Show duration as text initially (e.g., "2 MIN")
+            const mins = timerDuration / 60;
+            document.getElementById('timerDisplay').textContent = `${mins} MIN`;
+            document.getElementById('timerDisplay').style.color = '#00ffff';
+            document.getElementById('timerDisplay').style.textShadow = '0 0 10px rgba(0, 255, 255, 0.6)';
+
+            // Store the challenge and assignments for reveal
+            pendingChallenge = challenge;
+            pendingParticipants = selectedParticipants;
+            pendingAssignments = assignments; // NEW: Store exact assignments
+
+            // Show participant names with animation
+            showParticipantNames(selectedParticipants);
+
+            // Switch buttons
+            document.getElementById('nextDareBtn').style.display = 'none';
+            document.getElementById('showDareBtn').style.display = 'inline-block';
+        }
+
+        function showParticipantNames(selectedParticipants) {
+            // Check if all 4 participants are selected
+            if (selectedParticipants.length === 4) {
+                // Skip slot machine, just show "Everyone!"
+                document.getElementById('participantNames').innerHTML = 'Ready to see your dare?';
+                document.getElementById('participantNames').style.fontSize = '1rem';
+                document.getElementById('participantNames').style.opacity = '0.8';
+                
+                document.getElementById('dareText').innerHTML = '<span style="color: #00ffff; font-weight: 600; text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);">Everyone!</span>';
+                document.getElementById('dareText').style.fontSize = '3rem';
+                
+                document.getElementById('intensityBadge').textContent = `Lvl ${pendingChallenge.intensity}`;
+                document.getElementById('intensityBadge').style.display = 'block';
+                updateClothingDisplay();
+                
+                const toyBadge = document.getElementById('toyBadge');
+                if (pendingChallenge.requiresToy === true || pendingChallenge.requiresToy === 'Y') {
+                    toyBadge.style.display = 'block';
+                } else {
+                    toyBadge.style.display = 'none';
+                }
+                return;
+            }
+
+            // Slot machine roll animation
+            document.getElementById('participantNames').innerHTML = 'Ready to see your dare?';
+            document.getElementById('participantNames').style.fontSize = '1rem';
+            document.getElementById('participantNames').style.opacity = '0.8';
+            
+            const dareTextEl = document.getElementById('dareText');
+            dareTextEl.style.fontSize = '3rem';
+            
+            let rollCount = 0;
+            const totalRolls = 20; // Total number of rolls before landing
+            const rollInterval = 80; // ms between each roll (starts fast)
+            
+            const rollTimer = setInterval(() => {
+                // Pick random participants to display
+                const randomParticipants = [];
+                for (let i = 0; i < selectedParticipants.length; i++) {
+                    const randomP = participants[Math.floor(Math.random() * participants.length)];
+                    randomParticipants.push(randomP);
+                }
+                
+                const displayNames = randomParticipants.map(p => 
+                    `<span style="color: ${p.color}; font-weight: 600; text-shadow: 0 0 10px ${p.color}80;">${p.name}</span>`
+                ).join(' & ');
+                
+                dareTextEl.innerHTML = displayNames;
+                rollCount++;
+                
+                // Slow down near the end
+                if (rollCount >= totalRolls) {
+                    clearInterval(rollTimer);
+                    
+                    // Show final participants with slight delay
+                    setTimeout(() => {
+                        const finalNames = selectedParticipants.map(p => 
+                            `<span style="color: ${p.color}; font-weight: 600; text-shadow: 0 0 10px ${p.color}80;">${p.name}</span>`
+                        ).join(' & ');
+                        dareTextEl.innerHTML = finalNames;
+                    }, 100);
+                }
+            }, rollInterval);
+            
+            document.getElementById('intensityBadge').textContent = `Lvl ${pendingChallenge.intensity}`;
+            document.getElementById('intensityBadge').style.display = 'block';
+            updateClothingDisplay();
+            
+            // Update toy badge
+            const toyBadge = document.getElementById('toyBadge');
+            if (pendingChallenge.requiresToy === true || pendingChallenge.requiresToy === 'Y') {
+                toyBadge.style.display = 'block';
+            } else {
+                toyBadge.style.display = 'none';
+            }
+        }
+
+        function revealDare() {
+            // Step 2: Show the full dare with animation
+            if (!pendingChallenge || !pendingParticipants || !pendingAssignments) return;
+
+            displayDare(pendingChallenge, pendingParticipants, pendingAssignments);
+
+            // Switch buttons back
+            document.getElementById('showDareBtn').style.display = 'none';
+            document.getElementById('nextDareBtn').style.display = 'inline-block';
+
+            // Clear pending
+            pendingChallenge = null;
+            pendingParticipants = null;
+            pendingAssignments = null;
+        }
+
+        // Parse genderMix from either legacy format (same/different/any) or JSON format (F-M, F-F-M-M etc)
+        function parseGenderMix(genderMix) {
+            if (!genderMix || genderMix === 'any') return { type: 'any', females: 0, males: 0 };
+            if (genderMix === 'same') return { type: 'same', females: 0, males: 0 };
+            if (genderMix === 'different') return { type: 'different', females: 0, males: 0 };
+            if (genderMix === 'male-only') return { type: 'male-only', females: 0, males: 0 };
+            if (genderMix === 'female-only') return { type: 'female-only', females: 0, males: 0 };
+
+            // Parse F-F-M-M style format
+            const parts = genderMix.split('-');
+            const females = parts.filter(p => p === 'F').length;
+            const males = parts.filter(p => p === 'M').length;
+            return { type: 'explicit', females, males };
+        }
+
+        function selectParticipantsByGenderMix(numParticipants, genderMix) {
+            const parsed = parseGenderMix(genderMix);
+
+            // Generate all possible combinations of participants
+            function getCombinations(arr, size) {
+                if (size === 1) return arr.map(el => [el]);
+                const combos = [];
+                arr.forEach((el, i) => {
+                    const smaller = getCombinations(arr.slice(i + 1), size - 1);
+                    smaller.forEach(combo => combos.push([el, ...combo]));
+                });
+                return combos;
+            }
+            
+            const allCombos = getCombinations(participants.map((p, i) => i), parseInt(numParticipants));
+            
+            // Filter combinations based on gender mix and interaction preferences
+            const eligibleCombos = allCombos.filter(combo => {
+                const comboParticipants = combo.map(i => participants[i]);
+                const genders = comboParticipants.map(p => p.gender);
+                const femaleCount = genders.filter(g => g === 'Female').length;
+                const maleCount = genders.filter(g => g === 'Male').length;
+
+                // Check gender mix requirement
+                if (parsed.type === 'explicit') {
+                    if (femaleCount !== parsed.females) return false;
+                    if (maleCount !== parsed.males) return false;
+                } else if (parsed.type === 'same' && new Set(genders).size > 1) return false;
+                else if (parsed.type === 'different' && new Set(genders).size === 1) return false;
+                else if (parsed.type === 'male-only' && femaleCount > 0) return false;
+                else if (parsed.type === 'female-only' && maleCount > 0) return false;
+                
+                // Only enforce interaction preferences for 2-person dares
+                // For 3+ person dares, males can participate together as long as females are present
+                if (combo.length === 2) {
+                    for (let i = 0; i < combo.length; i++) {
+                        const participant = participants[combo[i]];
+                        if (!participant.interactions || participant.interactions.length === 0) continue;
+                        const otherIndices = combo.filter((_, idx) => idx !== i);
+                        const canInteractWithSomeone = otherIndices.some(idx =>
+                            participant.interactions.includes(idx)
+                        );
+                        if (!canInteractWithSomeone) return false;
+                    }
+                }
+                
+                return true;
+            });
+            
+            if (eligibleCombos.length === 0) return null;
+            
+            // Score each combo based on fairness (lower = better)
+            const scoredCombos = eligibleCombos.map(combo => {
+                let score = 0;
+                
+                // Add individual participation counts
+                combo.forEach(idx => {
+                    const name = participants[idx].name;
+                    score += (participationTracker[name] || 0);
+                });
+                
+                // Add pair interaction counts (weighted more heavily)
+                for (let i = 0; i < combo.length; i++) {
+                    for (let j = i + 1; j < combo.length; j++) {
+                        const key = [combo[i], combo[j]].sort().join('-');
+                        score += (interactionTracker[key] || 0) * 2; // Weight pairs 2x
+                    }
+                }
+                
+                return { combo, score };
+            });
+            
+            // Sort by score (lowest = least used = fairest)
+            scoredCombos.sort((a, b) => a.score - b.score);
+            
+            // Get the lowest score
+            const lowestScore = scoredCombos[0].score;
+            
+            // Get all combos with the lowest score (to handle ties)
+            const fairestCombos = scoredCombos.filter(c => c.score === lowestScore);
+            
+            // Randomly pick from the fairest options
+            const selectedCombo = fairestCombos[Math.floor(Math.random() * fairestCombos.length)].combo;
+            
+            console.log('Fairness selection:', {
+                totalEligible: scoredCombos.length,
+                fairestScore: lowestScore,
+                tiesToChooseFrom: fairestCombos.length,
+                selected: selectedCombo.map(i => participants[i].name)
+            });
+            
+            return selectedCombo.map(i => participants[i]);
+        }
+
+        function displayDare(challenge, selectedParticipants, assignments) {
+            // Use the EXACT assignments passed in
+            console.log('displayDare called with:', {
+                challenge: challenge.description,
+                selectedParticipants: selectedParticipants.map(p => p.name),
+                assignments: Object.fromEntries(
+                    Object.entries(assignments).map(([k, v]) => [k, v.name])
+                )
+            });
+            
+            // Start with the original challenge description
+            let dareText = challenge.description;
+            
+            // Use the pre-assigned participants from assignments
+            const femaleAssignments = {};
+            const maleAssignments = {};
+            
+            if (assignments['F1']) femaleAssignments['F1'] = assignments['F1'].name;
+            if (assignments['F2']) femaleAssignments['F2'] = assignments['F2'].name;
+            if (assignments['M1']) maleAssignments['M1'] = assignments['M1'].name;
+            if (assignments['M2']) maleAssignments['M2'] = assignments['M2'].name;
+            
+            console.log('Using assignments:', { femaleAssignments, maleAssignments });
+            
+            // Replace placeholders with assigned names
+            // Do F2/M2 first to avoid partial replacements
+            if (femaleAssignments['F2']) {
+                dareText = dareText.replace(/<F2>/g, femaleAssignments['F2']);
+                dareText = dareText.replace(/\bF2\b/g, femaleAssignments['F2']);
+            }
+            if (femaleAssignments['F1']) {
+                dareText = dareText.replace(/<F1>/g, femaleAssignments['F1']);
+                dareText = dareText.replace(/\bF1\b/g, femaleAssignments['F1']);
+            }
+            if (maleAssignments['M2']) {
+                dareText = dareText.replace(/<M2>/g, maleAssignments['M2']);
+                dareText = dareText.replace(/\bM2\b/g, maleAssignments['M2']);
+            }
+            if (maleAssignments['M1']) {
+                dareText = dareText.replace(/<M1>/g, maleAssignments['M1']);
+                dareText = dareText.replace(/\bM1\b/g, maleAssignments['M1']);
+            }
+            
+            console.log('Final dare text:', dareText);
+            
+            // Track interactions - only count participants whose names actually appear in the dare
+            const participantsInDare = participants.filter(p => {
+                // Check if this participant's name appears in the dare text
+                return dareText.includes(p.name);
+            });
+            
+            console.log('Participants actually in this dare:', participantsInDare.map(p => p.name));
+            
+            // Track individual participation - only for those in the dare
+            participantsInDare.forEach(p => {
+                participationTracker[p.name] = (participationTracker[p.name] || 0) + 1;
+            });
+            
+            // Track pair interactions - only if 2+ participants are in the dare
+            if (participantsInDare.length >= 2) {
+                for (let i = 0; i < participantsInDare.length; i++) {
+                    for (let j = i + 1; j < participantsInDare.length; j++) {
+                        const idx1 = participants.indexOf(participantsInDare[i]);
+                        const idx2 = participants.indexOf(participantsInDare[j]);
+                        const key = [idx1, idx2].sort().join('-');
+                        interactionTracker[key] = (interactionTracker[key] || 0) + 1;
+                    }
+                }
+            }
+            
+            console.log('Updated trackers:', {
+                participation: participationTracker,
+                interactions: interactionTracker
+            });
+            
+            // Update intensity badge
+            document.getElementById('intensityBadge').textContent = `Lvl ${challenge.intensity}`;
+            document.getElementById('intensityBadge').style.display = 'block';
+            updateClothingDisplay();
+
+            // Track current dare and enable edit button
+            currentDareId = challenge.id;
+            const editBtn = document.getElementById('editDareBtn');
+            if (editBtn) { editBtn.style.opacity = '1'; editBtn.style.pointerEvents = 'auto'; }
+
+            const toyBadge = document.getElementById('toyBadge');
+            if (challenge.requiresToy === true || challenge.requiresToy === 'Y') {
+                toyBadge.style.display = 'block';
+            } else {
+                toyBadge.style.display = 'none';
+            }
+            
+            // NEON FLASH ANIMATION
+            const dareTextEl = document.getElementById('dareText');
+            const participantsEl = document.getElementById('participantNames');
+            const cardEl = document.querySelector('.dare-card');
+            
+            // Hide participant names at top, reset styles
+            participantsEl.innerHTML = '';
+            participantsEl.style.fontSize = '';
+            participantsEl.style.opacity = '';
+            
+            // Pre-calculate the correct font size for the new text
+            // Temporarily set new text invisibly to measure it
+            const oldHtml = dareTextEl.innerHTML;
+            const oldSize = window.getComputedStyle(dareTextEl).fontSize;
+            dareTextEl.innerHTML = highlightPlayerNames(dareText);
+            dareTextEl.style.visibility = 'hidden';
+            fitDareText();
+            const newSize = window.getComputedStyle(dareTextEl).fontSize;
+            // Restore old text and visibility
+            dareTextEl.innerHTML = oldHtml;
+            dareTextEl.style.fontSize = oldSize;
+            dareTextEl.style.visibility = 'visible';
+            
+            // Start animation - old text fades out at ORIGINAL size
+            dareTextEl.classList.add('animating');
+            participantsEl.classList.add('animating');
+            cardEl.classList.add('flashing');
+            
+            // At MIDPOINT (1000ms) when opacity is 0, swap content and size
+            setTimeout(() => {
+                dareTextEl.innerHTML = highlightPlayerNames(dareText);
+                dareTextEl.style.fontSize = newSize; // Set new size while invisible
+            }, 1000);
+            
+            // Remove animation classes after completion
+            setTimeout(() => {
+                dareTextEl.classList.remove('animating');
+                participantsEl.classList.remove('animating');
+                cardEl.classList.remove('flashing');
+            }, 2000);
+            
+            const imageEl = document.getElementById('dareImage');
+            if (challenge.image) {
+                imageEl.src = challenge.image;
+                imageEl.style.display = 'block';
+            } else {
+                imageEl.style.display = 'none';
+            }
+        }
+
+        // Initialize displays
+        updateIntensityDisplay();
+        updateClothingDisplay();
+    </script>
+</body>
+</html>
