@@ -1,3 +1,6 @@
+
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -794,6 +797,14 @@
             </div>
 
             <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #3a3a3a;">
+                <h3 style="font-weight: 300; margin-bottom: 1rem; font-size: 1.1rem; letter-spacing: 1px;">PARTICIPANTS</h3>
+                <div id="participantManager" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 1.5rem;">
+                    <!-- Participants will be listed here -->
+                </div>
+                <button onclick="showAddParticipant()" class="btn-secondary" style="width: 100%;">+ ADD PARTICIPANT</button>
+            </div>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #3a3a3a;">
                 <h3 style="font-weight: 300; margin-bottom: 1rem; font-size: 1.1rem; letter-spacing: 1px;">IMPORT/EXPORT</h3>
                 <div class="button-row">
                     <button onclick="exportChallenges()" class="btn-secondary">EXPORT JSON</button>
@@ -890,6 +901,8 @@
                 </div>
             </div>
 
+        </div><!-- end game-screen -->
+
         <!-- Import Choice Modal -->
         <div id="importModal" class="stats-modal" style="display: none;">
             <div class="stats-content" style="max-width: 400px; text-align: center;">
@@ -921,7 +934,39 @@
                 <button onclick="closeStats()" style="margin-top: 2rem;">CLOSE</button>
             </div>
         </div>
-    </div>
+
+        <!-- Participant Edit Modal -->
+        <div id="participantModal" class="stats-modal" style="display: none;">
+            <div class="stats-content" style="max-width: 400px;">
+                <h2 id="participantModalTitle">ADD PARTICIPANT</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 2rem;">
+                    <div class="input-group">
+                        <label>NAME</label>
+                        <input type="text" id="participantName" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,255,0.3); border-radius: 8px; color: #fff; font-size: 1rem;">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>GENDER</label>
+                        <select id="participantGender" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,255,0.3); border-radius: 8px; color: #fff; font-size: 1rem;">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>COLOR</label>
+                        <input type="color" id="participantColor" value="#00ffff" style="width: 100%; height: 50px; padding: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,255,0.3); border-radius: 8px; cursor: pointer;">
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                        <button onclick="saveParticipant()" style="flex: 1;">SAVE</button>
+                        <button onclick="closeParticipantModal()" class="btn-secondary" style="flex: 1;">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- end app wrapper -->
 
     <script>
         // Version 2.0 - Stats tracking implemented
@@ -983,67 +1028,156 @@
         let pendingAssignments = null; // Store F1/F2/M1/M2 assignments
 
         // Load challenges from localStorage on startup
-       // function loadChallenges() {
-       //     const saved = localStorage.getItem('dareGameChallenges');
-       //     if (saved) {
-       //         challenges = JSON.parse(saved);
-       //     }
-       // }
+        //Load from Github
+        // NEW: Configuration for your GitHub file
+        const GITHUB_JSON_URL = 'https://github.com/Timbob-Git/AF/blob/main/dares.json'; // Relative path to your file in the same repo
 
+        async function loadChallenges() {
+            try {
+                console.log("Fetching dares from GitHub...");
+                const response = await fetch(GITHUB_JSON_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
-//Load from Github
-// NEW: Configuration for your GitHub file
-const GITHUB_JSON_URL = './dares.json'; // Relative path to your file in the same repo
+                const remoteChallenges = await response.json();
+                
+                // Option A: Use ONLY GitHub dares (Uncomment line below)
+                // challenges = remoteChallenges;
 
-async function loadChallenges() {
-    try {
-        console.log("Fetching dares from GitHub...");
-        const response = await fetch(GITHUB_JSON_URL);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                // Option B: Merge GitHub dares with any dares saved in localStorage
+                const localSaved = localStorage.getItem('dareGameChallenges');
+                const localChallenges = localSaved ? JSON.parse(localSaved) : [];
+                
+                // Merge and remove duplicates based on 'id'
+                const merged = [...remoteChallenges, ...localChallenges];
+                challenges = Array.from(new Map(merged.map(item => [item.id, item])).values());
+
+                console.log(`Loaded ${challenges.length} total dares (${remoteChallenges.length} from GitHub, ${localChallenges.length} local).`);
+                renderChallengeList(); // Refresh the UI list if you're in setup
+                
+            } catch (error) {
+                console.warn("Could not fetch GitHub JSON, falling back to local storage:", error);
+                const saved = localStorage.getItem('dareGameChallenges');
+                if (saved) {
+                    challenges = JSON.parse(saved);
+                    console.log(`Loaded ${challenges.length} dares from local storage.`);
+                } else {
+                    console.log("No local dares found.");
+                }
+            }
         }
-
-        const remoteChallenges = await response.json();
-        
-        // Option A: Use ONLY GitHub dares (Uncomment line below)
-        // challenges = remoteChallenges;
-
-        // Option B: Merge GitHub dares with any dares saved in localStorage
-        const localSaved = localStorage.getItem('dareGameChallenges');
-        const localChallenges = localSaved ? JSON.parse(localSaved) : [];
-        
-        // Merge and remove duplicates based on 'id'
-        const merged = [...remoteChallenges, ...localChallenges];
-        challenges = Array.from(new Map(merged.map(item => [item.id, item])).values());
-
-        console.log(`Loaded ${challenges.length} total dares.`);
-        renderChallengeList(); // Refresh the UI list if you're in setup
-        
-    } catch (error) {
-        console.warn("Could not fetch GitHub JSON, falling back to local storage:", error);
-        const saved = localStorage.getItem('dareGameChallenges');
-        if (saved) {
-            challenges = JSON.parse(saved);
-        }
-    }
-}
-
-// Update the initialization listener to handle the async function
-window.addEventListener('DOMContentLoaded', async () => {
-    await loadChallenges();
-    updateIntensityDisplay(); // Keep your original init logic
-    updateClothingDisplay();
-});
 
         // Save challenges to localStorage
         function saveChallenges() {
             localStorage.setItem('dareGameChallenges', JSON.stringify(challenges));
         }
 
+        // Default participants
+        participants = [
+            { name: 'Tim', gender: 'Male', color: '#00d4ff', interactions: [2, 3] },
+            { name: 'Troy', gender: 'Male', color: '#00ff88', interactions: [2, 3] },
+            { name: 'Emma', gender: 'Female', color: '#ff1493', interactions: [0, 1, 3] },
+            { name: 'Rachel', gender: 'Female', color: '#e0b0ff', interactions: [0, 1, 2] }
+        ];
+
+        let editingParticipantIndex = null;
+
+        function renderParticipantList() {
+            const container = document.getElementById('participantManager');
+            if (!container) return;
+            
+            container.innerHTML = participants.map((p, idx) => `
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(0,255,255,0.2); border-radius: 8px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 24px; height: 24px; border-radius: 50%; background: ${p.color};"></div>
+                        <span style="font-weight: 600;">${p.name}</span>
+                        <span style="opacity: 0.6; font-size: 0.9rem;">(${p.gender})</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="editParticipant(${idx})" class="btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;">Edit</button>
+                        <button onclick="deleteParticipant(${idx})" class="btn-secondary" style="padding: 8px 16px; font-size: 0.9rem; opacity: 0.6;">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showAddParticipant() {
+            editingParticipantIndex = null;
+            document.getElementById('participantModalTitle').textContent = 'ADD PARTICIPANT';
+            document.getElementById('participantName').value = '';
+            document.getElementById('participantGender').value = 'Male';
+            document.getElementById('participantColor').value = '#00ffff';
+            document.getElementById('participantModal').style.display = 'flex';
+        }
+
+        function editParticipant(index) {
+            editingParticipantIndex = index;
+            const p = participants[index];
+            document.getElementById('participantModalTitle').textContent = 'EDIT PARTICIPANT';
+            document.getElementById('participantName').value = p.name;
+            document.getElementById('participantGender').value = p.gender;
+            document.getElementById('participantColor').value = p.color;
+            document.getElementById('participantModal').style.display = 'flex';
+        }
+
+        function deleteParticipant(index) {
+            if (participants.length <= 2) {
+                alert('You must have at least 2 participants!');
+                return;
+            }
+            participants.splice(index, 1);
+            renderParticipantList();
+        }
+
+        function saveParticipant() {
+            const name = document.getElementById('participantName').value.trim();
+            const gender = document.getElementById('participantGender').value;
+            const color = document.getElementById('participantColor').value;
+            
+            if (!name) {
+                alert('Please enter a name');
+                return;
+            }
+            
+            if (editingParticipantIndex !== null) {
+                // Editing existing
+                participants[editingParticipantIndex] = {
+                    ...participants[editingParticipantIndex],
+                    name,
+                    gender,
+                    color
+                };
+            } else {
+                // Adding new
+                const newParticipant = {
+                    name,
+                    gender,
+                    color,
+                    interactions: [] // Will be populated based on gender
+                };
+                
+                // Set interactions based on gender (interact with opposite gender)
+                const indices = participants.map((p, i) => i);
+                newParticipant.interactions = indices.filter(i => participants[i].gender !== gender);
+                
+                participants.push(newParticipant);
+            }
+            
+            renderParticipantList();
+            closeParticipantModal();
+        }
+
+        function closeParticipantModal() {
+            document.getElementById('participantModal').style.display = 'none';
+            editingParticipantIndex = null;
+        }
+
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
             loadChallenges();
+            renderParticipantList();
         });
 
         // Debug helper - can be called from console
@@ -1577,59 +1711,39 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
 
         function startGame() {
-            // Hardcoded participants
-            // Index: 0=Tim, 1=Troy, 2=Emma, 3=Rachel
-            participants = [
-                {
-                    name: 'Tim',
-                    gender: 'Male',
-                    interactions: [2, 3], // interacts with Emma(2), Rachel(3)
-                    color: '#00d4ff' // Cyan
-                },
-                {
-                    name: 'Troy',
-                    gender: 'Male',
-                    interactions: [2, 3], // interacts with Emma(2), Rachel(3)
-                    color: '#00ff88' // Green
-                },
-                {
-                    name: 'Emma',
-                    gender: 'Female',
-                    interactions: [0, 1, 3], // interacts with Tim(0), Troy(1), Rachel(3)
-                    color: '#ff1493' // Deep Hot Pink
-                },
-                {
-                    name: 'Rachel',
-                    gender: 'Female',
-                    interactions: [0, 1, 2], // interacts with Tim(0), Troy(1), Emma(2)
-                    color: '#e0b0ff' // Neon Lavender
-                }
-            ];
-
-            console.log('Hardcoded participants:', participants);
-
             if (challenges.length === 0) {
                 alert('Please add some challenges first in the setup screen');
                 return;
             }
 
-            usedChallenges.clear();
-            currentIntensity = 1;
-            currentClothingLevel = 1;
-            
-            // Initialize trackers
-            interactionTracker = {};
-            participationTracker = {};
-            participants.forEach(p => {
-                participationTracker[p.name] = 0;
-            });
-            
+            // Hide all other screens
+            document.querySelector('.start-screen').classList.remove('active');
+            document.querySelector('.setup-screen').classList.remove('active');
             document.getElementById('participantsDetailSetup').style.display = 'none';
             document.getElementById('participantsNameSetup').style.display = 'none';
+            
+            // Show game screen
             document.querySelector('.game-screen').classList.add('active');
-            setIntensity(1);
-            setClothingLevel(1);
-            displayParticipantsList();
+            
+            // Only initialize game state if starting fresh (no dare text shown yet)
+            const dareText = document.getElementById('dareText').textContent;
+            if (dareText === 'Click "Next Dare" to begin') {
+                // Fresh start - initialize everything
+                usedChallenges.clear();
+                currentIntensity = 1;
+                currentClothingLevel = 1;
+                
+                // Initialize trackers
+                interactionTracker = {};
+                participationTracker = {};
+                participants.forEach(p => {
+                    participationTracker[p.name] = 0;
+                });
+                
+                setIntensity(1);
+                setClothingLevel(1);
+            }
+            // Otherwise just return to existing game state
         }
 
         function displayParticipantsList() {
