@@ -1,5 +1,4 @@
 [
-   
   {
     "id": 1770026384889,
     "description": "The Gaze: F1 and M2 must hold an uninterrupted gaze while the others talk around them.",
@@ -8,7 +7,9 @@
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 1
+    "clothingLevel": 1,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384890,
@@ -18,27 +19,21 @@
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 1
+    "clothingLevel": 1,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026384891,
-    "description": "The Lap Sit: F1 must sit on M2\u2019s lap for the next round of the game.",
+    "description": "The Lap Sit: F1 must sit on M2’s lap for the next round of the game.",
     "intensity": 2,
     "participantCount": 2,
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 1
-  },
-  {
-    "id": 1770026384893,
-    "description": "Necklace: F1 must kiss F2 from one earlobe, across the neck, to the other earlobe.",
-    "intensity": 2,
-    "participantCount": 2,
-    "genderMix": "F-F",
-    "image": null,
-    "requiresToy": false,
-    "clothingLevel": 1
+    "clothingLevel": 1,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384894,
@@ -48,7 +43,9 @@
     "genderMix": "F-M-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 1
+    "clothingLevel": 1,
+    "Winner": "M1, M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384897,
@@ -58,17 +55,21 @@
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026384898,
-    "description": "The Thigh Gap: F1 must slide her hand up M2\u2019s inner thigh, stopping just before the groin.",
+    "description": "The Thigh Gap: F1 must slide her hand up M2’s inner thigh, stopping just before the groin.",
     "intensity": 2,
     "participantCount": 2,
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 1
+    "clothingLevel": 1,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384902,
@@ -78,27 +79,21 @@
     "genderMix": "F-F",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384905,
-    "description": "Body Shots: F1 drinks a 'shot' off M2\u2019s stomach or chest.",
+    "description": "Body Shots: F1 drinks a 'shot' off M2’s stomach or chest.",
     "intensity": 3,
     "participantCount": 2,
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
-  },
-  {
-    "id": 1770026384906,
-    "description": "Underwear Exchange: F1 and F2 go to another room and swap one item of lingerie and return.",
-    "intensity": 3,
-    "participantCount": 2,
-    "genderMix": "F-F",
-    "image": null,
-    "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384907,
@@ -108,7 +103,9 @@
     "genderMix": "F-F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "M2",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026384909,
@@ -118,7 +115,9 @@
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026384910,
@@ -128,7 +127,9 @@
     "genderMix": "F-F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "F1, F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026384911,
@@ -138,7 +139,9 @@
     "genderMix": "F-F-M-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "M1, M2",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026384912,
@@ -148,7 +151,9 @@
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384914,
@@ -158,7 +163,9 @@
     "genderMix": "F-M-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026384915,
@@ -168,17 +175,21 @@
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 3
+    "clothingLevel": 3,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384917,
-    "description": "Double Trouble: M1 and M2 both kiss F1\u2019s neck and chest simultaneously.",
+    "description": "Double Trouble: M1 and M2 both kiss F1’s neck and chest simultaneously.",
     "intensity": 4,
     "participantCount": 3,
     "genderMix": "F-M-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "F1",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026384918,
@@ -188,7 +199,9 @@
     "genderMix": "F-F-M-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "F1, M1, M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026384920,
@@ -198,7 +211,9 @@
     "genderMix": "F-F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 2
+    "clothingLevel": 2,
+    "Winner": "M1",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026384921,
@@ -208,7 +223,9 @@
     "genderMix": "F-M-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 3
+    "clothingLevel": 3,
+    "Winner": "F1",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026384922,
@@ -218,7 +235,9 @@
     "genderMix": "F-F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 3
+    "clothingLevel": 3,
+    "Winner": "M1",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026384923,
@@ -228,7 +247,9 @@
     "genderMix": "F-F-M-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 3
+    "clothingLevel": 3,
+    "Winner": "F1, F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026384926,
@@ -238,7 +259,9 @@
     "genderMix": "F-F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 3
+    "clothingLevel": 3,
+    "Winner": "F1",
+    "Loser": "M1, F2"
   },
   {
     "id": 1770026384928,
@@ -248,7 +271,9 @@
     "genderMix": "F-F-M-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 3
+    "clothingLevel": 3,
+    "Winner": "F1, F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026384885,
@@ -258,47 +283,9 @@
     "genderMix": "F-M",
     "image": null,
     "requiresToy": false,
-    "clothingLevel": 1
-  },
-  {
-    "id": 1770026384890,
-    "description": "Wardrobe Change: F2 chooses one item of clothing for M1 to remove.",
-    "intensity": 1,
-    "participantCount": 2,
-    "genderMix": "F-M",
-    "image": null,
-    "requiresToy": false,
-    "clothingLevel": 1
-  },
-  {
-    "id": 1770026384891,
-    "description": "The Lap Sit: F1 must sit on M2\u2019s lap for the next round of the game.",
-    "intensity": 2,
-    "participantCount": 2,
-    "genderMix": "F-M",
-    "image": null,
-    "requiresToy": false,
-    "clothingLevel": 1
-  },
-  {
-    "id": 1770026384893,
-    "description": "Necklace: F1 must kiss F2 from one earlobe, across the neck, to the other earlobe.",
-    "intensity": 2,
-    "participantCount": 2,
-    "genderMix": "F-F",
-    "image": null,
-    "requiresToy": false,
-    "clothingLevel": 1
-  },
-  {
-    "id": 1770026384894,
-    "description": "Hand Placement: M1 and M2 must sit on either side of F1; she places a hand on each of their thighs for one round.",
-    "intensity": 2,
-    "participantCount": 3,
-    "genderMix": "F-M-M",
-    "image": null,
-    "requiresToy": false,
-    "clothingLevel": 1
+    "clothingLevel": 1,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026384947,
@@ -308,7 +295,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 1,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1"
   },
   {
     "id": 1770026384948,
@@ -318,17 +307,21 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026384949,
     "description": "<M2> must give <F1> a full body massage while she is only in her underwear.",
     "intensity": 4,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026384951,
@@ -338,7 +331,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F2"
   },
   {
     "id": 1770026384952,
@@ -348,7 +343,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026384953,
@@ -358,7 +355,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 1,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2, M1, M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384954,
@@ -368,7 +367,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026384955,
@@ -378,7 +379,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1, M2",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026384957,
@@ -388,7 +391,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384958,
@@ -398,7 +403,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F2"
   },
   {
     "id": 1770026384960,
@@ -408,7 +415,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026384961,
@@ -418,7 +427,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384963,
@@ -428,7 +439,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1, M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384964,
@@ -438,7 +451,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026384965,
@@ -448,17 +463,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
-  },
-  {
-    "id": 1770026384966,
-    "description": "<M1> must blindfold <F1> and use his tongue to find her most sensitive spot.",
-    "intensity": 3,
-    "participantCount": 2,
-    "genderMix": "F-F",
-    "clothingLevel": 2,
-    "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1, M2",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026384967,
@@ -468,7 +475,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384968,
@@ -478,7 +487,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F2"
   },
   {
     "id": 1770026384969,
@@ -488,7 +499,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026384970,
@@ -498,7 +511,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2, M1, M2"
   },
   {
     "id": 1770026384971,
@@ -508,7 +523,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, M1, M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026384972,
@@ -518,7 +535,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1, F2"
   },
   {
     "id": 1770026384973,
@@ -528,7 +547,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026384974,
@@ -538,7 +559,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026384975,
@@ -548,27 +571,21 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
-  },
-  {
-    "id": 1770026384976,
-    "description": "<M1> and <M2> must swap partners for physical play.",
-    "intensity": 5,
-    "participantCount": 2,
-    "genderMix": "F-F",
-    "clothingLevel": 2,
-    "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1"
   },
   {
     "id": 1770026384977,
     "description": "<F2> must sit naked on <M2>'s lap for the next round.",
     "intensity": 5,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026384980,
@@ -578,27 +595,9 @@
     "genderMix": "F-F",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
-  },
-  {
-    "id": 1770026384981,
-    "description": "<F2> must give <M1> a back massage while she is completely naked.",
-    "intensity": 5,
-    "participantCount": 2,
-    "genderMix": "F-F",
-    "clothingLevel": 2,
-    "requiresToy": false,
-    "image": null
-  },
-  {
-    "id": 1770026384982,
-    "description": "<M1> and <M2> must both touch <F1>'s inner thighs at the same time.",
-    "intensity": 4,
-    "participantCount": 2,
-    "genderMix": "F-F",
-    "clothingLevel": 2,
-    "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384983,
@@ -608,7 +607,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026384985,
@@ -618,17 +619,21 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026384986,
     "description": "<F1> must use her hands to explore <M1>'s underwear.",
     "intensity": 4,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1"
   },
   {
     "id": 1770026384988,
@@ -638,7 +643,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026384989,
@@ -648,7 +655,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026384990,
@@ -658,7 +667,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026384991,
@@ -668,7 +679,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026384993,
@@ -678,7 +691,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1"
   },
   {
     "id": 1770026384996,
@@ -688,7 +703,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026384998,
@@ -698,7 +715,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385000,
@@ -708,7 +727,9 @@
     "genderMix": "F-F",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026385001,
@@ -718,7 +739,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385003,
@@ -728,17 +751,21 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385004,
     "description": "<F2> must wear a blindfold and try to identify <M1> or <M2> by touch.",
     "intensity": 5,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1, M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026385005,
@@ -748,7 +775,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385006,
@@ -758,17 +787,21 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385008,
     "description": "<M1> must give <F1> a foot massage while she is in her lingerie.",
     "intensity": 3,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1"
   },
   {
     "id": 1770026385009,
@@ -778,7 +811,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385011,
@@ -788,7 +823,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026385012,
@@ -798,7 +835,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1"
   },
   {
     "id": 1770026385013,
@@ -808,7 +847,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 1,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026385015,
@@ -818,7 +859,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2, F2"
   },
   {
     "id": 1770026385016,
@@ -828,7 +871,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, M1, M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026385017,
@@ -838,7 +883,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026385018,
@@ -848,17 +895,21 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2, M1, M2"
   },
   {
     "id": 1770026385021,
     "description": "<F1> must let <F2> and <M2> take turns 'pleasuring' her.",
     "intensity": 4,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2, M2"
   },
   {
     "id": 1770026385022,
@@ -868,7 +919,9 @@
     "genderMix": "F-F",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, M1, M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026385023,
@@ -878,7 +931,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385024,
@@ -888,27 +943,21 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1"
   },
   {
     "id": 1770026385026,
     "description": "<M1> must use his hands to cup <F2>'s breasts while she is topless.",
     "intensity": 5,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
-  },
-  {
-    "id": 1770026385027,
-    "description": "<F1> and <F2> must stand back to back and rub their bodies together.",
-    "intensity": 5,
-    "participantCount": 2,
-    "genderMix": "F-F",
-    "clothingLevel": 2,
-    "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026385031,
@@ -918,7 +967,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2, M1"
   },
   {
     "id": 1770026385032,
@@ -928,7 +979,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 1,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1"
   },
   {
     "id": 1770026385033,
@@ -938,7 +991,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385034,
@@ -948,7 +1003,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385036,
@@ -958,7 +1015,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1, F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385037,
@@ -968,7 +1027,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026385039,
@@ -978,7 +1039,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385040,
@@ -988,7 +1051,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026385042,
@@ -998,7 +1063,9 @@
     "genderMix": "F-M",
     "clothingLevel": 1,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385043,
@@ -1008,17 +1075,21 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385044,
     "description": "<M1> must use his hands to explore <F2>'s body while she is blindfolded.",
     "intensity": 3,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026385046,
@@ -1028,7 +1099,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1, F2"
   },
   {
     "id": 1770026385047,
@@ -1038,7 +1111,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1"
   },
   {
     "id": 1770026385048,
@@ -1048,7 +1123,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385049,
@@ -1058,7 +1135,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026385052,
@@ -1068,7 +1147,9 @@
     "genderMix": "F-F",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385054,
@@ -1078,7 +1159,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F1"
   },
   {
     "id": 1770026385057,
@@ -1088,7 +1171,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385059,
@@ -1098,7 +1183,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026385060,
@@ -1108,17 +1195,21 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026385061,
     "description": "<F2> must use a vibrating wand on herself while <M1> kisses her neck.",
     "intensity": 5,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F2"
   },
   {
     "id": 1770026385062,
@@ -1128,17 +1219,21 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385067,
     "description": "<F2> must let <M2> use a vibrator on her while she is blindfolded.",
     "intensity": 5,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026385068,
@@ -1148,7 +1243,9 @@
     "genderMix": "F-F",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385073,
@@ -1158,7 +1255,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F1"
   },
   {
     "id": 1770026385075,
@@ -1168,7 +1267,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385076,
@@ -1178,7 +1279,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": true,
-    "image": null
+    "image": null,
+    "Winner": "F1, F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026385100,
@@ -1188,7 +1291,9 @@
     "genderMix": "M-M",
     "clothingLevel": 1,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1"
   },
   {
     "id": 1770026385101,
@@ -1198,17 +1303,21 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385102,
-    "description": "<F2> and <F1> must lie together naked and explore each other's bodies with their hands.",
+    "description": "<F2> and <F1> must standup up together naked and explore each other's bodies with their hands.",
     "intensity": 4,
     "participantCount": 2,
     "genderMix": "F-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385104,
@@ -1218,7 +1327,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, M1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385105,
@@ -1228,27 +1339,33 @@
     "genderMix": "M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1, M2",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026385106,
     "description": "<M2> must pleasure <F1> using only his mouth.",
     "intensity": 5,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385107,
     "description": "<F2> must sit naked on <M1>'s lap and grind against him for the next round.",
     "intensity": 3,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385109,
@@ -1258,7 +1375,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385110,
@@ -1268,7 +1387,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026385112,
@@ -1278,7 +1399,9 @@
     "genderMix": "F-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385114,
@@ -1288,7 +1411,9 @@
     "genderMix": "M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026385118,
@@ -1298,7 +1423,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "F1, M2"
   },
   {
     "id": 1770026385120,
@@ -1308,7 +1435,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026385121,
@@ -1318,7 +1447,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2, M1",
+    "Loser": "F1, M2"
   },
   {
     "id": 1770026385122,
@@ -1328,7 +1459,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026385123,
@@ -1338,17 +1471,21 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385124,
     "description": "<M2> must use his hands to explore <F1>'s body while he is blindfolded.",
     "intensity": 3,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385126,
@@ -1358,27 +1495,33 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385127,
     "description": "<M1> must give <F1> a session of 'manual pleasure' while whispering dirty things.",
     "intensity": 3,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1"
   },
   {
     "id": 1770026385128,
     "description": "<F1> must sit on <M2>'s lap, naked, and kiss him until the timer runs out.",
     "intensity": 3,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385129,
@@ -1388,7 +1531,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026385130,
@@ -1398,7 +1543,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026385131,
@@ -1408,7 +1555,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2, M1, M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385132,
@@ -1418,7 +1567,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1"
   },
   {
     "id": 1770026385133,
@@ -1428,7 +1579,9 @@
     "genderMix": "F-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385134,
@@ -1438,17 +1591,21 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385135,
     "description": "<F1> and <M1> must engage in an activity of <F1>'s chosing",
     "intensity": 3,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1"
   },
   {
     "id": 1770026385136,
@@ -1458,7 +1615,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026385140,
@@ -1468,7 +1627,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026385141,
@@ -1478,7 +1639,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, M2",
+    "Loser": "M2, F2"
   },
   {
     "id": 1770026385142,
@@ -1488,7 +1651,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2, M1, M2"
   },
   {
     "id": 1770026385143,
@@ -1498,7 +1663,9 @@
     "genderMix": "M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026385144,
@@ -1508,7 +1675,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385145,
@@ -1518,17 +1687,21 @@
     "genderMix": "F-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385146,
     "description": "<M2> must use his mouth to find <F1>'s most sensitive spot and stay there.",
     "intensity": 3,
     "participantCount": 2,
-    "genderMix": "F-F",
+    "genderMix": "M-F",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385147,
@@ -1538,7 +1711,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, M1, M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026385148,
@@ -1548,7 +1723,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026385200,
@@ -1558,7 +1735,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1"
   },
   {
     "id": 1770026385202,
@@ -1568,7 +1747,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026385204,
@@ -1578,7 +1759,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026385205,
@@ -1588,7 +1771,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2, F1",
+    "Loser": "F1, M1"
   },
   {
     "id": 1770026385206,
@@ -1598,7 +1783,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026385207,
@@ -1608,7 +1795,9 @@
     "genderMix": "M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, F2",
+    "Loser": "M1, M2"
   },
   {
     "id": 1770026385208,
@@ -1618,7 +1807,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1"
   },
   {
     "id": 1770026385209,
@@ -1628,7 +1819,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2"
   },
   {
     "id": 1770026385210,
@@ -1638,7 +1831,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1, F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026385211,
@@ -1648,7 +1843,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1, M2",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026385212,
@@ -1658,7 +1855,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2"
   },
   {
     "id": 1770026385213,
@@ -1668,7 +1867,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026385216,
@@ -1678,7 +1879,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2, M2"
   },
   {
     "id": 1770026385217,
@@ -1688,7 +1891,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1"
   },
   {
     "id": 1770026385300,
@@ -1698,7 +1903,9 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1"
   },
   {
     "id": 1770026385301,
@@ -1708,7 +1915,9 @@
     "genderMix": "F-M",
     "clothingLevel": 1,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F2"
   },
   {
     "id": 1770026385302,
@@ -1718,7 +1927,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2, M1"
   },
   {
     "id": 1770026385303,
@@ -1728,7 +1939,9 @@
     "genderMix": "F-M",
     "clothingLevel": 1,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1"
   },
   {
     "id": 1770026385304,
@@ -1738,7 +1951,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "F2, M1, M2"
   },
   {
     "id": 1770026385305,
@@ -1748,7 +1963,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1, F1"
   },
   {
     "id": 1770026385306,
@@ -1758,7 +1975,9 @@
     "genderMix": "F-M-M",
     "clothingLevel": 1,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1"
   },
   {
     "id": 1770026385307,
@@ -1768,7 +1987,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2, F2"
   },
   {
     "id": 1770026385308,
@@ -1778,7 +1999,9 @@
     "genderMix": "F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F2"
   },
   {
     "id": 1770026385309,
@@ -1788,7 +2011,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 2,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M1, F1"
   },
   {
     "id": 1770026385310,
@@ -1798,7 +2023,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M2, F2"
   },
   {
     "id": 1770026385311,
@@ -1808,7 +2035,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M1",
+    "Loser": "F1, F2"
   },
   {
     "id": 1770026385312,
@@ -1818,7 +2047,9 @@
     "genderMix": "F-F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F2",
+    "Loser": "M2, F1"
   },
   {
     "id": 1770026385313,
@@ -1828,7 +2059,9 @@
     "genderMix": "F-F-M-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "M2",
+    "Loser": "F1, F2, M1"
   },
   {
     "id": 1770026385314,
@@ -1838,6 +2071,8 @@
     "genderMix": "F-M",
     "clothingLevel": 3,
     "requiresToy": false,
-    "image": null
+    "image": null,
+    "Winner": "F1",
+    "Loser": "M1"
   }
-]
+]"
