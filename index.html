@@ -55,11 +55,15 @@
   .list { max-height:420px; overflow-y:auto; }
 
   /* game */
-  .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:8px; }
+  .topbar { display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; margin-bottom:10px; }
+  .topbar button { width:100%; padding:9px 2px !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  @media (max-width:420px) { .topbar button { font-size:.62rem !important; letter-spacing:.5px; } }
   .stages { display:flex; gap:6px; margin-bottom:10px; }
   .stages div { flex:1; text-align:center; font-size:.68rem; letter-spacing:1px; text-transform:uppercase; padding:6px 2px; border-radius:10px; border:1px solid rgba(0,255,255,.2); color:#777; line-height:1.4; }
   .stages div.on { color:#fff; background:rgba(255,0,128,.22); border-color:var(--pink); box-shadow:0 0 15px rgba(255,0,128,.4); }
   .stages div.done { color:var(--cyan); }
+  .dare-card.compact { height:auto !important; padding:20px 18px !important; }
+  .dare-card.compact .timer-bar { display:none; }
   .dare-card { background:var(--card); backdrop-filter:blur(20px); border:2px solid rgba(255,0,128,.3); padding:64px 34px 96px; border-radius:25px; text-align:center; margin-bottom:1rem;
     box-shadow:0 0 60px rgba(255,0,128,.25), inset 0 0 40px rgba(0,255,255,.05); position:relative; height:480px; display:flex; flex-direction:column; justify-content:center; overflow:hidden; }
   .badge { position:absolute; top:18px; padding:7px 15px; border-radius:20px; font-size:.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; }
@@ -144,6 +148,9 @@
       <div class="panel"><label class="h" style="margin-top:0">Where dares come from</label>
         <select id="sourceSel"><option value="both">Our deck + freshly generated dares</option><option value="deck">Our deck only</option><option value="gen">Generated only</option></select>
       </div>
+      <div class="panel"><label class="chip" style="border:none;padding:0;font-size:1rem"><input type="checkbox" id="drinkSel" onchange="drinkSkip=this.checked; store.set('drinkSkip', drinkSkip)"> Skipping a dare costs a drink</label>
+        <p class="muted" style="margin-top:6px">A sip at levels 1–2, two big sips at 3, a shot at 4–5. Saying no to a pairing before the dare is shown is always free, and there's always a "skip free" option.</p>
+      </div>
     </div>
 
     <div id="tDares" class="tab" style="display:none">
@@ -183,14 +190,11 @@
   <!-- GAME -->
   <div class="screen" id="gameScreen">
     <div class="topbar">
-      <div class="button-row" style="gap:6px">
-        <button class="btn-secondary small" onclick="showStats()">Stats</button>
-        <button class="btn-secondary small" onclick="pause()">Pause</button>
-      </div>
-      <div class="button-row" style="gap:6px">
-        <button class="btn-secondary small" onclick="skipLevel()">Next level</button>
-        <button class="btn-secondary small" onclick="goStart()">Exit</button>
-      </div>
+      <button class="btn-secondary small" onclick="showStats()">Stats</button>
+      <button class="btn-secondary small" onclick="pause()">Pause</button>
+      <button class="btn-secondary small" onclick="skipLevel()" title="Skip to the next level">Skip lvl</button>
+      <button class="btn-secondary small" onclick="restartGame()">Restart</button>
+      <button class="btn-secondary small" onclick="goStart()">Exit</button>
     </div>
     <div class="stages" id="stageStrip"></div>
     <div class="dare-card" id="card">
@@ -220,6 +224,7 @@
     <h3>Dares each</h3><div id="sPlays"></div>
     <h3>Pairs</h3><div id="sPairs"></div>
     <h3>Kinds</h3><div id="sKinds"></div>
+    <h3>Drinks to skip</h3><div id="sDrinks"></div>
     <div class="button-row" style="margin-top:20px"><button onclick="$('#statsModal').classList.remove('on')">CLOSE</button></div>
   </div>
 </div>
@@ -301,7 +306,7 @@ document.querySelector('.tabs').addEventListener('click', (e) => {
   document.querySelectorAll('.tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
   document.querySelectorAll('.tab').forEach((x) => (x.style.display = x.id === t ? 'block' : 'none'));
 });
-function renderSetup() { renderCouples(); renderPlayers(); renderKit(); renderDareList(); $('#sourceSel').value = source; }
+function renderSetup() { renderCouples(); renderPlayers(); renderKit(); renderDareList(); $('#sourceSel').value = source; $('#drinkSel').checked = drinkSkip; }
 $('#sourceSel').addEventListener('change', (e) => { source = e.target.value; save(); });
 
 function renderCouples() {
@@ -440,18 +445,55 @@ function exportDeck() {
 // dealer picks cards so everyone gets exactly that and each man is paired with each woman
 // as evenly as possible, then the cards are played in order from level 1 up.
 const LEVEL_NAMES = ['Icebreaker', 'Flirty', 'Foreplay', 'Intimate', 'Full on'];
-let plan = store.get('plan', [2, 3, 3, 3, 2]);
+let plan = store.get('plan', [2, 3, 3, 3, 2]); // the custom plan
+
+// Quick start: say where things are at and how long you've got; the plan is worked out for you.
+const WHERE = [['Just getting going', 1], ['Already kissing', 2], ['Clothes are coming off', 3], ['Already swapping', 4]];
+const HOWLONG = [['30 min', 30], ['1 hour', 60], ['2 hours', 120], ['3 hours', 180]];
+// Rough minutes per card at each level, including reading it out and getting into position.
+const MIN_PER_CARD = [0, 2.5, 3, 4, 5, 7];
+let quick = store.get('quick', { where: 0, len: 1, custom: false });
+if (!HOWLONG[quick.len]) quick.len = 1;
+let drinkSkip = store.get('drinkSkip', true);
+/** Spread `total` turns each over levels start..5, a little heavier in the middle levels. */
+function makePlan(start, total) {
+  const w = { 1: 1, 2: 1.2, 3: 1.3, 4: 1.3, 5: 1 };
+  const lv = [1, 2, 3, 4, 5].filter((l) => l >= start);
+  const sw = lv.reduce((s, l) => s + w[l], 0);
+  const raw = lv.map((l) => (total * w[l]) / sw);
+  const out = raw.map((x) => Math.max(1, Math.floor(x)));
+  let left = total - out.reduce((a, b) => a + b, 0);
+  raw.map((x, i) => [x - Math.floor(x), i]).sort((a, b) => b[0] - a[0]).forEach(([, i]) => { if (left > 0) { out[i]++; left--; } });
+  return [1, 2, 3, 4, 5].map((l) => (l < start ? 0 : out[lv.indexOf(l)]));
+}
+// Each "turn each" adds about 1.75 cards (four people, roughly 2.3 people per card).
+const planMinutes = (p) => p.reduce((s, n, i) => s + n * 1.75 * MIN_PER_CARD[i + 1], 0);
+/** Turns each that best fill `minutes`, starting at level `start`. */
+function turnsFor(start, minutes) {
+  let best = 1, bd = Infinity;
+  for (let T = 1; T <= 40; T++) { const d = Math.abs(planMinutes(makePlan(start, T)) - minutes); if (d < bd) { bd = d; best = T; } }
+  return best;
+}
+const activePlan = () => (quick.custom ? plan : makePlan(WHERE[quick.where][1], turnsFor(WHERE[quick.where][1], HOWLONG[quick.len][1])));
+const cardsMinutes = (cards) => Math.round(cards.reduce((s, c) => s + MIN_PER_CARD[c.level], 0) / 5) * 5;
+function setQuick(k, v) { quick[k] = v; if (k !== 'custom') quick.custom = false; store.set('quick', quick); renderGame(); }
+const drinkFor = (level) => (level <= 2 ? 'a sip' : level === 3 ? 'two big sips' : 'a shot');
+
 let night = newNight();
-function newNight() { return { phase: 'start', deal: null, cards: [], idx: 0, used: new Set(), stats: E.emptyStats(), sinceCheck: 0, skipCheck: false, current: null, note: '' }; }
+function newNight() { return { phase: 'start', deal: null, plan: null, cards: [], idx: 0, used: new Set(), stats: E.emptyStats(), drinks: {}, sinceCheck: 0, skipCheck: false, current: null, note: '' }; }
 let wakeLock = null;
 async function keepAwake() { try { wakeLock = await navigator.wakeLock.request('screen'); } catch {} }
 
-function setPlan(level, delta) { plan[level] = Math.max(0, Math.min(8, plan[level] + delta)); store.set('plan', plan); renderGame(); }
+function setPlan(level, delta) {
+  if (!quick.custom) { plan = activePlan().slice(); quick.custom = true; store.set('quick', quick); }
+  plan[level] = Math.max(0, Math.min(8, plan[level] + delta)); store.set('plan', plan); renderGame();
+}
 function dealCards() {
-  if (!plan.some((n) => n > 0)) return alert('Choose at least one dare at some level.');
-  night = newNight(); night.phase = 'dealing'; renderGame();
+  const p = activePlan().slice();
+  if (!p.some((n) => n > 0)) return alert('Choose at least one dare at some level.');
+  night = newNight(); night.plan = p; night.phase = 'dealing'; renderGame();
   setTimeout(() => {
-    const d = E.dealNight({ perLevel: plan, players, rules: rules(), kit, deck: deck(), source, recent: store.get('history', []) });
+    const d = E.dealNight({ perLevel: p, players, rules: rules(), kit, deck: deck(), source, recent: store.get('history', []) });
     night.deal = d; night.cards = d.cards.slice(); night.used = new Set(d.cards.map((c) => c.dare.id));
     night.phase = 'dealt'; renderGame();
   }, 40);
@@ -479,14 +521,30 @@ function done() {
 }
 // Passing is free. The card is swapped for another at the same level with the same people
 // (and the same pairings where possible), so the night stays balanced.
-function pass() {
+function pass(prefix = '') {
   stopTimer();
   const card = night.cards[night.idx];
   const sub = E.substitute(card, night.deal.pools, night.used);
-  if (sub) { night.used.add(sub.dare.id); night.cards[night.idx] = sub; night.current = sub; night.phase = 'names'; night.note = 'Swapped for another dare with the same people.'; renderGame(true); }
-  else { night.cards.splice(night.idx, 1); night.skipCheck = true; draw(); night.note = 'No like-for-like swap left, so that one was dropped.'; renderGame(); }
+  if (sub) { night.used.add(sub.dare.id); night.cards[night.idx] = sub; night.current = sub; night.phase = 'names'; night.note = prefix + 'Swapped for another dare with the same people.'; renderGame(true); }
+  else { night.cards.splice(night.idx, 1); night.skipCheck = true; draw(); night.note = prefix + 'No like-for-like swap left, so that one was dropped.'; renderGame(); }
+}
+// Drink to skip: once a dare is showing, skipping it costs whoever wants out a drink.
+// Saying no to a pairing before the dare is shown, and the "skip free" option, always cost nothing.
+function askSkip() { stopTimer(); night.phase = 'skip'; renderGame(); }
+function takeDrink(name) {
+  const amt = drinkFor(night.current.level);
+  night.drinks[name] = (night.drinks[name] || 0) + 1;
+  pass(`${name} drinks ${amt} 🥃 · `);
 }
 function carryOn() { night.sinceCheck = 0; night.skipCheck = true; draw(); }
+// Back to the start screen for a fresh deal. Your names, swap levels and kit are kept.
+function restartGame() {
+  if (['names', 'dare', 'skip', 'checkin', 'dealt'].includes(night.phase) && !confirm('Restart? This ends the current game and goes back to the start screen for a new deal.')) return;
+  stopTimer(); resume();
+  night = newNight();
+  renderGame();
+  window.scrollTo(0, 0);
+}
 function skipUpcoming() {
   const lvl = night.nextLevel;
   while (night.idx < night.cards.length && night.cards[night.idx].level === lvl) night.idx++;
@@ -545,6 +603,7 @@ function fitText() {
 function renderGame(animate) {
   screenToken++;
   clearInterval(rollIv);
+  if (night.phase !== 'dare') { $('#dareText').classList.remove('animating'); $('#turnLine').classList.remove('animating'); $('#card').classList.remove('flashing'); }
   const R = rules();
   // level strip: progress through the dealt cards
   const playing = ['names', 'dare', 'checkin'].includes(night.phase);
@@ -553,7 +612,7 @@ function renderGame(animate) {
     const inLvl = night.cards.filter((c) => c.level === l);
     const doneN = night.cards.slice(0, night.idx).filter((c) => c.level === l).length;
     const cls = l === curLvl ? 'on' : (playing || night.phase === 'end') && inLvl.length && doneN === inLvl.length ? 'done' : '';
-    const sub = night.cards.length ? (l === curLvl ? `${Math.min(doneN + 1, inLvl.length)}/${inLvl.length}` : `${inLvl.length} cards`) : `${plan[l - 1]} each`;
+    const sub = night.cards.length ? (l === curLvl ? `${Math.min(doneN + 1, inLvl.length)}/${inLvl.length}` : `${inLvl.length} cards`) : `${activePlan()[l - 1]} each`;
     return `<div class="${cls}">L${l} ${LEVEL_NAMES[l - 1]}<br>${sub}</div>`;
   }).join('');
   const turn = $('#turnLine'), text = $('#dareText'), veto = $('#vetoLine'), acts = $('#actions');
@@ -563,21 +622,30 @@ function renderGame(animate) {
 
   if (night.phase === 'start') {
     setBadges(null);
+    // compact header so the level and duration choices sit right at the top of the screen
     turn.textContent = 'Tonight';
-    text.innerHTML = couples.map((c) => c.members.map((n) => (byName(n) ? nameHtml(byName(n)) : E.esc(n))).join(' &amp; ')).join('<br>') +
-      `<div class="muted" style="margin-top:14px;font-size:.95rem">Swapping: <b>${E.SWAP_LEVELS[R.swapLevel]}</b><br>Agree your safeword now and say it out loud.</div>`;
-    text.style.fontSize = '1.8rem';
-    a = `<button class="big" onclick="dealCards()">DEAL THE CARDS</button>`;
-    panels = `<div class="panel"><label class="h" style="margin-top:0;color:var(--pink)">How many dares each, per level?</label>
-      <p class="muted">Everyone gets exactly this many turns at each level. Each man is paired with each woman as evenly as possible, so swap and spouse dares come up equally.</p>
+    text.innerHTML = couples.map((c) => c.members.map((n) => (byName(n) ? nameHtml(byName(n)) : E.esc(n))).join(' &amp; ')).join(' · ') +
+      `<div class="muted" style="margin-top:8px;font-size:.85rem">Swapping: <b>${E.SWAP_LEVELS[R.swapLevel]}</b> · agree your safeword out loud</div>`;
+    text.style.fontSize = '1.3rem';
+    a = ''; // the Deal button sits under the choices
+    const ap = activePlan(), from = ap.findIndex((n) => n > 0) + 1;
+    const tile = (on, label, sub, click) => `<button class="${on ? 'btn-go' : 'btn-cyan'}" style="padding:16px 10px;border-radius:16px;letter-spacing:1px;text-transform:none;font-size:1rem" onclick="${click}">${label}${sub ? `<br><span style="font-size:.75rem;opacity:.75;font-weight:400">${sub}</span>` : ''}</button>`;
+    panels = `<div class="panel">
+      <label class="h" style="margin-top:0;color:var(--pink)">Where are we?</label>
+      <div class="grid2">${WHERE.map(([t], i) => tile(!quick.custom && quick.where === i, t, `starts at level ${WHERE[i][1]}`, `setQuick('where',${i})`)).join('')}</div>
+      <label class="h">How long have we got?</label>
+      <div class="grid2">${HOWLONG.map(([t, m], i) => { const s = WHERE[quick.where][1], n = makePlan(s, turnsFor(s, m)).reduce((x, y) => x + y, 0); return tile(!quick.custom && quick.len === i, t, `${n} turn${n === 1 ? '' : 's'} each`, `setQuick('len',${i})`); }).join('')}</div>
+      <p class="muted" style="margin-top:12px">${quick.custom ? 'Using your custom plan' : `Dealing levels ${from}–5`}: ${ap.reduce((x, y) => x + y, 0)} turns each, about ${Math.round(planMinutes(ap) / 5) * 5} min.</p>
+      <div class="button-row" style="margin-top:14px"><button class="big" style="width:100%" onclick="dealCards()">DEAL THE CARDS</button></div></div>
+      <details class="panel" ${quick.custom ? 'open' : ''}><summary class="h" style="color:var(--cyan);cursor:pointer">Custom plan</summary>
+      <p class="muted">Set the exact number of turns each at every level. Everyone gets exactly this many, and each man is paired with each woman as evenly as possible.</p>
       ${[0, 1, 2, 3, 4].map((i) => `<div style="display:flex;align-items:center;gap:10px;margin-top:10px">
         <div style="flex:1"><b style="color:var(--cyan)">Level ${i + 1}</b> <span class="muted">${LEVEL_NAMES[i]}</span></div>
         <button class="btn-secondary small" onclick="setPlan(${i},-1)">−</button>
-        <div style="min-width:64px;text-align:center"><b style="font-size:1.3rem">${plan[i]}</b> <span class="muted">each</span></div>
-        <button class="btn-secondary small" onclick="setPlan(${i},1)">+</button></div>`).join('')}
-      <p class="muted" style="margin-top:12px">${plan.reduce((x, y) => x + y, 0)} turns each tonight.</p></div>
-      <div class="panel"><label class="h" style="margin-top:0;color:var(--pink)">What have we got tonight?</label>
-      <p class="muted">Untick anything you don't have; dares that need it won't be dealt.</p>${propPicker()}</div>`;
+        <div style="min-width:64px;text-align:center"><b style="font-size:1.3rem">${ap[i]}</b> <span class="muted">each</span></div>
+        <button class="btn-secondary small" onclick="setPlan(${i},1)">+</button></div>`).join('')}</details>
+      <details class="panel"><summary class="h" style="color:var(--cyan);cursor:pointer">Tonight's kit</summary>
+      <p class="muted">Untick anything you don't have; dares that need it won't be dealt.</p>${propPicker()}</details>`;
   } else if (night.phase === 'dealing') {
     setBadges(null);
     turn.textContent = '';
@@ -586,13 +654,13 @@ function renderGame(animate) {
     setBadges(null);
     const rep = night.deal.report;
     turn.textContent = 'Cards dealt';
-    text.innerHTML = `<b style="font-size:2.4rem;color:var(--pink)">${rep.total}</b> dares for tonight<div class="muted" style="margin-top:10px;font-size:.95rem">${Object.entries(rep.kinds).map(([k, v]) => `${E.KINDS[k] || k} ${v}`).join(' · ')}</div>`;
+    text.innerHTML = `<b style="font-size:2.4rem;color:var(--pink)">${rep.total}</b> dares for tonight<div class="muted" style="font-size:1rem">about ${cardsMinutes(night.cards)} min</div><div class="muted" style="margin-top:10px;font-size:.95rem">${Object.entries(rep.kinds).map(([k, v]) => `${E.KINDS[k] || k} ${v}`).join(' · ')}</div>`;
     text.style.fontSize = '1.6rem';
     a = `<button class="btn-go big" onclick="startNight()">START THE NIGHT</button><button class="btn-secondary" onclick="dealCards()">RE-DEAL</button><button class="btn-cyan" onclick="night = newNight(); renderGame()">CHANGE PLAN</button>`;
     const cell = (v, want) => `<td style="text-align:center;padding:4px 6px;${want !== undefined && v !== want ? 'color:var(--warn);font-weight:700' : ''}">${v}</td>`;
     panels = `<div class="panel"><label class="h" style="margin-top:0;color:var(--pink)">Turns each</label>
       <table style="width:100%;border-collapse:collapse;font-size:.9rem"><tr><td></td>${[1, 2, 3, 4, 5].map((l) => `<td class="muted" style="text-align:center">L${l}</td>`).join('')}<td class="muted" style="text-align:center">All</td></tr>
-      ${players.map((p) => { const pl = rep.perLevel[p.name] || [0, 0, 0, 0, 0]; return `<tr><td>${nameHtml(p)}</td>${pl.map((v, i) => cell(v, plan[i])).join('')}${cell(rep.plays[p.name] || 0)}</tr>`; }).join('')}</table>
+      ${players.map((p) => { const pl = rep.perLevel[p.name] || [0, 0, 0, 0, 0]; return `<tr><td>${nameHtml(p)}</td>${pl.map((v, i) => cell(v, night.plan[i])).join('')}${cell(rep.plays[p.name] || 0)}</tr>`; }).join('')}</table>
       <label class="h">Who's with whom</label>
       ${Object.entries(rep.pairs).sort((x, y) => y[1] - x[1]).map(([k, v]) => { const [a1, b1] = k.split('|').map(byName); const tag = R.spouseOf[a1.name] === b1.name ? 'spouses' : a1.gender === b1.gender ? 'girls' : 'swap'; return `<div class="stat"><span>${nameHtml(a1)} &amp; ${nameHtml(b1)} <span class="muted">${tag}</span></span><span>${v}</span></div>`; }).join('')}
       ${night.deal.shortfalls.length ? `<p class="muted" style="color:var(--warn);margin-top:10px">Couldn't fully match the plan: ${E.esc(night.deal.shortfalls.join('; '))}. Tick more kit, or let generated dares in (Setup → Kit).</p>` : ''}
@@ -602,15 +670,26 @@ function renderGame(animate) {
     setBadges(r);
     turn.textContent = 'Ready to see your dare?';
     const sc = E.spouseCheck(r.dare, r.casting, R).map(byName).filter(Boolean);
-    if (sc.length) veto.innerHTML = `<div class="veto">${sc.map(nameHtml).join(' &amp; ')}: happy with this pairing? Skipping is free.</div>`;
+    if (sc.length) veto.innerHTML += `<div class="veto">${sc.map(nameHtml).join(' &amp; ')}: happy with this pairing? Saying no here is always free.</div>`;
     if (r.casting.cast) rollNames(r.casting.people);
     else { text.innerHTML = `<span style="color:var(--cyan);font-weight:600;text-shadow:0 0 20px rgba(0,255,255,.8)">Everyone!</span>`; text.style.fontSize = '3rem'; }
-    a = `<button class="btn-go big" onclick="showDare()">${sc.length ? 'WE\'RE GOOD · SHOW' : 'SHOW DARE'}</button><button class="btn-secondary" onclick="pass()">SKIP</button>`;
+    a = `<button class="btn-go big" onclick="showDare()">${sc.length ? 'WE\'RE GOOD · SHOW' : 'SHOW DARE'}</button><button class="btn-secondary" onclick="pass()">NOT THIS ONE</button>`;
   } else if (night.phase === 'dare') {
     const r = night.current;
     const html = (r.dare.title ? `<div style="color:var(--pink);font-size:.55em;letter-spacing:3px;text-transform:uppercase;margin-bottom:.4em">${E.esc(r.dare.title)}</div>` : '') + E.render(r.dare, r.casting, true, R);
     flash(() => { turn.textContent = ''; text.innerHTML = html; });
-    a = `<button class="big" onclick="done()">DONE · NEXT</button><button class="btn-secondary" onclick="pass()">PASS (FREE)</button>`;
+    a = `<button class="big" onclick="done()">DONE · NEXT</button>` +
+      (drinkSkip ? `<button class="btn-secondary" onclick="askSkip()">🍹 DRINK TO SKIP</button>` : `<button class="btn-secondary" onclick="pass()">PASS (FREE)</button>`);
+  } else if (night.phase === 'skip') {
+    const r = night.current;
+    setBadges(r);
+    turn.textContent = 'Skip this one?';
+    const who = (r.active || r.casting.people.map((p) => p.name)).map(byName).filter(Boolean);
+    text.innerHTML = `Whoever wants out takes <b style="color:var(--pink)">${drinkFor(r.level)}</b> 🥃<div class="muted" style="margin-top:12px;font-size:.95rem">Tap who's drinking. You'll get another dare with the same people.</div>`;
+    text.style.fontSize = '1.7rem';
+    a = who.map((p) => `<button class="btn-secondary" style="border-color:${E.esc(p.color)};color:${E.esc(p.color)}" onclick="takeDrink(${JSON.stringify(p.name).replace(/"/g, '&quot;')})">${E.esc(p.name)}</button>`).join('') +
+      `<button class="btn-cyan" onclick="night.phase='dare'; renderGame()">BACK TO THE DARE</button>` +
+      `<button class="btn-secondary small" style="opacity:.75" onclick="pass()">No thanks · skip free</button>`;
   } else if (night.phase === 'checkin') {
     setBadges(null);
     const nl = night.nextLevel;
@@ -628,7 +707,8 @@ function renderGame(animate) {
   }
   acts.innerHTML = a;
   $('#startPanels').innerHTML = panels;
-  if (night.phase !== 'dare' && night.phase !== 'names') fitText();
+  $('#card').classList.toggle('compact', night.phase === 'start');
+  if (night.phase !== 'dare' && night.phase !== 'names' && night.phase !== 'start') fitText();
 }
 
 // ---- timer ----
@@ -659,6 +739,7 @@ function showStats() {
   $('#sPlays').innerHTML = Object.entries(s.plays).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([n, c]) => row(byName(n) ? nameHtml(byName(n)) : E.esc(n), c)).join('') || none;
   $('#sPairs').innerHTML = Object.entries(s.pairs).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([k, c]) => row(k.split('|').map((n) => (byName(n) ? nameHtml(byName(n)) : E.esc(n))).join(' &amp; '), c)).join('') || none;
   $('#sKinds').innerHTML = Object.entries(s.kinds).filter(([, c]) => c > 0).map(([k, c]) => row(E.KINDS[k] || k, c)).join('') || none;
+  $('#sDrinks').innerHTML = Object.entries(night.drinks).sort((a, b) => b[1] - a[1]).map(([n, c]) => row(byName(n) ? nameHtml(byName(n)) : E.esc(n), c + ' 🥃')).join('') || '<p class="muted">Nobody yet.</p>';
   $('#statsModal').classList.add('on');
 }
 
