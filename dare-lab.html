@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dare Lab</title>
+<style>
+  :root { --bg:#0a0a0a; --card:#151515; --line:rgba(0,255,255,.22); --cyan:#00ffff; --pink:#ff0080; --green:#00e08a; --text:#eee; --muted:#888; --warn:#ffb020; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:16px; }
+  h1 { color:var(--cyan); letter-spacing:4px; font-size:1.5rem; margin:6px 0 12px; }
+  nav { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+  nav button, .btn { background:transparent; border:1px solid var(--line); color:var(--cyan); border-radius:10px; padding:8px 14px; cursor:pointer; font:inherit; }
+  nav button.on { background:rgba(0,255,255,.15); color:#fff; }
+  .btn.hot { background:linear-gradient(135deg,var(--pink),#ff4da6); border:none; color:#fff; font-weight:700; }
+  .btn.go { background:linear-gradient(135deg,#00b86b,var(--green)); border:none; color:#00170c; font-weight:700; }
+  .btn.big { font-size:1.1rem; padding:14px 26px; border-radius:14px; }
+  section { display:none; } section.on { display:block; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .center { justify-content:center; }
+  input[type=text], select { background:#0d0d0d; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:7px 9px; font:inherit; max-width:100%; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip { display:inline-flex; gap:5px; align-items:center; border:1px solid var(--line); border-radius:999px; padding:3px 10px; font-size:.85rem; cursor:pointer; user-select:none; }
+  .chip input { accent-color:var(--pink); }
+  .tag { display:inline-block; font-size:.75rem; border:1px solid var(--line); border-radius:999px; padding:1px 8px; margin:2px 3px 0 0; color:var(--cyan); }
+  .tag.prop { color:var(--pink); border-color:rgba(255,0,128,.4); }
+  .kind { display:inline-block; font-size:.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:3px 10px; border-radius:999px; background:rgba(255,0,128,.18); color:var(--pink); }
+  .warn { color:var(--warn); font-size:.85rem; }
+  .muted { color:var(--muted); font-size:.85rem; }
+  .dare { padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.06); }
+  .dare:last-child { border-bottom:none; }
+  .dare b.t { color:var(--pink); }
+  label.h { display:block; color:var(--cyan); font-size:.75rem; letter-spacing:2px; text-transform:uppercase; margin:10px 0 6px; }
+  .stat { display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+
+  /* party */
+  .stages { display:flex; gap:6px; margin-bottom:12px; }
+  .stages div { flex:1; text-align:center; font-size:.75rem; letter-spacing:1px; text-transform:uppercase; padding:6px 4px; border-radius:10px; border:1px solid var(--line); color:var(--muted); }
+  .stages div.on { color:#fff; background:rgba(255,0,128,.2); border-color:var(--pink); }
+  .stages div.done { color:var(--cyan); }
+  .stage-card { min-height:340px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:14px; padding:28px 20px; }
+  .who { font-size:2rem; font-weight:700; line-height:1.3; }
+  .dtext { font-size:1.45rem; line-height:1.6; max-width:640px; }
+  .dtitle { color:var(--pink); letter-spacing:3px; font-size:.85rem; text-transform:uppercase; }
+  .veto { border:1px dashed var(--warn); border-radius:12px; padding:10px 14px; color:var(--warn); }
+  .timer { font-size:2rem; color:var(--cyan); font-weight:300; letter-spacing:3px; }
+  #pauseOverlay { position:fixed; inset:0; background:#000; display:none; align-items:center; justify-content:center; flex-direction:column; gap:14px; z-index:10; color:var(--muted); }
+  @media (max-width:600px) { .dtext { font-size:1.15rem; } .who { font-size:1.5rem; } .stage-card { padding:20px 10px; min-height:300px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>DARE LAB</h1>
+  <nav id="tabs">
+    <button data-tab="party" class="on">Party</button>
+    <button data-tab="couples">Couples</button>
+    <button data-tab="kit">Kit</button>
+    <button data-tab="gen">Generate</button>
+    <button data-tab="deck">Deck</button>
+  </nav>
+
+  <!-- PARTY -->
+  <section id="party" class="on">
+    <div class="stages" id="stageStrip"></div>
+    <div class="card stage-card" id="stage"></div>
+    <div class="row center" id="controls"></div>
+    <div class="row center" style="margin-top:14px">
+      <button class="btn" onclick="pause()">Pause</button>
+      <button class="btn" onclick="skipStage()">Next stage</button>
+      <button class="btn" onclick="endNight()">End the night</button>
+      <label class="muted">Dares from
+        <select id="source"><option value="both">my deck + generated</option><option value="gen">generated only</option><option value="deck">my deck only</option></select>
+      </label>
+    </div>
+    <div class="card" style="margin-top:14px"><label class="h">Tonight so far</label><div id="tally" class="muted">Nothing yet.</div></div>
+  </section>
+
+  <!-- COUPLES -->
+  <section id="couples">
+    <div class="card muted">Set this up together before the party. Swap levels are each couple's own call. The game always uses the <b>lower</b> of the two for anything between a husband and the other wife. Women together, and anything with your own spouse, aren't limited by the swap level, only by the ticks and limits below.</div>
+    <div id="coupleList"></div>
+    <label class="h">Players</label>
+    <div id="playerList"></div>
+    <button class="btn" onclick="addPlayer()">+ Add player</button>
+  </section>
+
+  <!-- KIT -->
+  <section id="kit">
+    <div class="card"><label class="h">Props &amp; toys you have tonight</label><div class="chips" id="propChips"></div></div>
+    <div class="card"><label class="h">Rooms / furniture available</label><div class="chips" id="placeChips"></div></div>
+    <p class="muted">Dares needing anything unticked are skipped automatically.</p>
+  </section>
+
+  <!-- GENERATE -->
+  <section id="gen">
+    <div class="card row">
+      <label>Level <select id="gLevel"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
+      <label>Max clothing <select id="gCloth"><option value="1">Clothed</option><option value="2">Underwear</option><option value="3" selected>Naked</option></select></label>
+      <label>Kind <select id="gKind"><option value="">Any</option></select></label>
+      <label>How many <select id="gCount"><option>5</option><option selected>10</option><option>25</option></select></label>
+      <button class="btn hot" onclick="runGen()">Generate</button>
+      <button class="btn" onclick="runNight()">Generate a whole night</button>
+    </div>
+    <p class="muted" id="gInfo"></p>
+    <div class="card" id="genList"><span class="muted">Everything generated fits your couples' rules, limits and kit. Each dare shows one example of who could get it.</span></div>
+    <div class="row"><button class="btn" onclick="keepAll()">Add all to deck</button></div>
+  </section>
+
+  <!-- DECK -->
+  <section id="deck">
+    <div class="card row">
+      <button class="btn hot" onclick="$('#file').click()">Load dares.json</button>
+      <input type="file" id="file" accept=".json" hidden>
+      <button class="btn" onclick="exportV1()">Export for current game</button>
+      <button class="btn" onclick="exportV2()">Export v2 (tagged)</button>
+      <span class="muted" id="deckCount"></span>
+    </div>
+    <div class="card row">
+      <select id="fLevel"><option value="">All levels</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+      <select id="fCloth"><option value="">Any clothing</option><option value="1">Clothed</option><option value="2">Underwear</option><option value="3">Naked</option></select>
+      <select id="fShow"><option value="">All dares</option><option value="blocked">Unplayable right now</option><option value="warn">Data warnings</option><option value="generated">Generated only</option></select>
+      <input type="text" id="fText" placeholder="Search text or tag…">
+    </div>
+    <div class="card" id="deckList"></div>
+  </section>
+</div>
+
+<div id="pauseOverlay" onclick="resume()"><div style="font-size:1.4rem;color:#fff">Paused</div><div>Tap anywhere to carry on</div></div>
+
+<script src="dare-engine.js"></script>
+<script>
+const E = window.DareEngine;
+const $ = (s) => document.querySelector(s);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('dareLab2.' + k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('dareLab2.' + k, JSON.stringify(v)); } catch {} },
+};
+const COLORS = ['#00d4ff', '#00ff88', '#ff1493', '#e0b0ff', '#ffd000', '#ff7a00'];
+const LIMIT_TAGS = ['anal', 'penetration', 'oral', 'spanking', 'restraint', 'blindfold', 'sensation', 'group', 'same-sex'];
+
+let deck = store.get('deck', []);
+let players = store.get('players', [
+  { name: 'Tim', gender: 'M', color: COLORS[0], partners: ['Emma', 'Rachel'], limits: [] },
+  { name: 'Emma', gender: 'F', color: COLORS[2], partners: ['Tim', 'Troy', 'Rachel'], limits: [] },
+  { name: 'Troy', gender: 'M', color: COLORS[1], partners: ['Emma', 'Rachel'], limits: [] },
+  { name: 'Rachel', gender: 'F', color: COLORS[3], partners: ['Tim', 'Troy', 'Emma'], limits: [] },
+]);
+let couples = store.get('couples', [{ members: ['Tim', 'Emma'], swap: 2 }, { members: ['Troy', 'Rachel'], swap: 2 }]);
+let kit = store.get('kit', { props: ['drink', 'ice'], places: E.PLACES.slice() });
+let generated = [];
+const save = () => { store.set('deck', deck); store.set('players', players); store.set('couples', couples); store.set('kit', kit); };
+const rules = () => ({ ...E.rulesFromCouples(couples, players), players });
+const nameHtml = (p) => `<b style="color:${E.esc(p.color)}">${E.esc(p.name)}</b>`;
+const byName = (n) => players.find((p) => p.name === n);
+
+// ---------- tabs ----------
+$('#tabs').addEventListener('click', (e) => {
+  const t = e.target.dataset.tab; if (!t) return;
+  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
+  document.querySelectorAll('section').forEach((s) => s.classList.toggle('on', s.id === t));
+  if (t === 'deck') renderDeck();
+  if (t === 'party') renderParty();
+});
+
+// =================== PARTY ===================
+const STAGES = E.DEFAULT_STAGES;
+let night = null;
+function newNight() {
+  return { stage: 0, done: 0, extra: 0, cap: 0, used: new Set(), stats: E.emptyStats(), stageKinds: {}, phase: 'start', current: null, log: [], sinceCheck: 0 };
+}
+night = newNight();
+
+function pool() {
+  const src = $('#source').value, st = STAGES[night.stage];
+  const gen = src === 'deck' ? [] : E.stagePool(st, players, kit, rules(), night.used);
+  return (src === 'gen' ? [] : deck).concat(gen);
+}
+
+let wakeLock = null;
+async function keepAwake() { try { wakeLock = await navigator.wakeLock.request('screen'); } catch {} }
+
+function startNight() { night = newNight(); keepAwake(); draw(); }
+
+function draw() {
+  const st = STAGES[night.stage];
+  if (night.done >= st.dares + night.extra) return checkIn(true);
+  if (night.sinceCheck >= 4) return checkIn(false);
+  const r = E.partyNext(pool(), players, { stage: st, done: night.done, used: night.used, stats: night.stats, stageKinds: night.stageKinds, kit, rules: rules(), cap: night.cap });
+  if (!r) { night.phase = 'empty'; return renderParty(); }
+  night.used.add(r.dare.id);
+  night.current = r;
+  night.phase = 'names';
+  renderParty();
+}
+
+function showDare() { night.phase = 'dare'; resetTimer(); renderParty(); }
+
+function done() {
+  const r = night.current;
+  E.recordPlay(night.stats, r.dare, r.casting, r.kind);
+  night.stageKinds[r.kind] = (night.stageKinds[r.kind] || 0) + 1;
+  night.log.push({ kind: r.kind, stage: night.stage });
+  night.done++; night.sinceCheck++;
+  stopTimer(); draw();
+}
+function pass() { stopTimer(); draw(); } // free: nothing recorded, the dare stays out for the night
+
+function checkIn(stageEnd) {
+  night.phase = 'checkin'; night.stageEnd = stageEnd; renderParty();
+}
+function carryOn() {
+  night.sinceCheck = 0;
+  if (night.stageEnd) {
+    if (night.stage === STAGES.length - 1) return endNight();
+    night.stage++; night.done = 0; night.extra = 0; night.cap = 0; night.stageKinds = {};
+  }
+  draw();
+}
+function slowDown() {
+  const st = STAGES[night.stage];
+  night.cap = Math.max(st.min, (night.cap || st.max) - 1);
+  if (night.stageEnd) night.extra += 3;
+  night.sinceCheck = 0;
+  draw();
+}
+function skipStage() { if (night.phase === 'start') return; night.stageEnd = true; carryOn(); }
+function endNight() { stopTimer(); night.phase = 'end'; renderParty(); try { wakeLock && wakeLock.release(); } catch {} }
+function pause() { $('#pauseOverlay').style.display = 'flex'; stopTimer(); }
+function resume() { $('#pauseOverlay').style.display = 'none'; }
+
+// timer
+let tSec = 0, tInt = null;
+function resetTimer() { stopTimer(); tSec = night.current ? night.current.dare.duration : 60; }
+function toggleTimer() {
+  if (tInt) { stopTimer(); return renderTimer(); }
+  tInt = setInterval(() => { tSec = Math.max(0, tSec - 1); renderTimer(); if (!tSec) { stopTimer(); beep(); } }, 1000);
+  renderTimer();
+}
+function stopTimer() { if (tInt) clearInterval(tInt); tInt = null; }
+function renderTimer() { const el = $('#timer'); if (el) el.textContent = `${String(Math.floor(tSec / 60)).padStart(2, '0')}:${String(tSec % 60).padStart(2, '0')}`; const b = $('#tbtn'); if (b) b.textContent = tInt ? 'Pause timer' : 'Start timer'; }
+function beep() { try { const a = new AudioContext(), o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination); o.frequency.value = 800; g.gain.setValueAtTime(.3, a.currentTime); g.gain.exponentialRampToValueAtTime(.01, a.currentTime + .6); o.start(); o.stop(a.currentTime + .6); } catch {} }
+
+function renderParty() {
+  const st = STAGES[night.stage];
+  $('#stageStrip').innerHTML = STAGES.map((s, i) => `<div class="${i === night.stage && night.phase !== 'start' && night.phase !== 'end' ? 'on' : i < night.stage || night.phase === 'end' ? 'done' : ''}">${s.name}${i === night.stage && !['start', 'end'].includes(night.phase) ? `<br>${Math.min(night.done + 1, s.dares + night.extra)}/${s.dares + night.extra}` : ''}</div>`).join('');
+  const R = rules();
+  let html = '', ctl = '';
+  if (night.phase === 'start') {
+    const cs = couples.map((c) => `${c.members.map((n) => byName(n) ? nameHtml(byName(n)) : E.esc(n)).join(' &amp; ')}: <span class="muted">${E.SWAP_LEVELS[c.swap]}</span>`).join('<br>');
+    html = `<div class="dtitle">Tonight</div><div>${cs}</div><div class="muted">Swap level in play: <b>${E.SWAP_LEVELS[R.swapLevel]}</b>. Pick your safeword now and say it out loud.</div>`;
+    ctl = `<button class="btn hot big" onclick="startNight()">Start the night</button>`;
+  } else if (night.phase === 'names') {
+    const r = night.current, who = r.casting.cast ? r.casting.people.map(nameHtml).join(' &amp; ') : 'Everyone';
+    const sc = E.spouseCheck(r.dare, r.casting, R).map(byName).filter(Boolean);
+    html = `<span class="kind">${E.KINDS[r.kind] || r.kind}</span><div class="who">${who}</div><div class="muted">Level ${r.dare.intensity}${r.dare.props.length ? ' · needs ' + r.dare.props.join(', ') : ''}</div>` +
+      (sc.length ? `<div class="veto">${sc.map(nameHtml).join(' &amp; ')}: happy with this pairing? Skipping is free.</div>` : '');
+    ctl = `<button class="btn go big" onclick="showDare()">${sc.length ? 'We\'re good: show the dare' : 'Show the dare'}</button><button class="btn big" onclick="pass()">Skip</button>`;
+  } else if (night.phase === 'dare') {
+    const r = night.current;
+    html = `<span class="kind">${E.KINDS[r.kind] || r.kind}</span>${r.dare.title ? `<div class="dtitle">${E.esc(r.dare.title)}</div>` : ''}<div class="dtext">${E.render(r.dare, r.casting, true, R)}</div><div class="timer" id="timer"></div>`;
+    ctl = `<button class="btn" id="tbtn" onclick="toggleTimer()">Start timer</button><button class="btn hot big" onclick="done()">Done: next dare</button><button class="btn big" onclick="pass()">Pass (free)</button>`;
+  } else if (night.phase === 'checkin') {
+    const nextSt = STAGES[night.stage + 1];
+    html = `<div class="dtitle">Check-in</div><div class="dtext">Each couple, take a minute together. Everyone still having fun?</div>` +
+      (night.stageEnd ? `<div class="muted">${nextSt ? `Next up: <b>${nextSt.name}</b> (levels ${nextSt.min}–${nextSt.max})` : 'That was the last stage.'}</div>` : '');
+    ctl = `<button class="btn go big" onclick="carryOn()">Both couples: thumbs up</button><button class="btn big" onclick="slowDown()">Slow down</button><button class="btn" onclick="endNight()">Call it a night</button>`;
+  } else if (night.phase === 'empty') {
+    html = `<div class="dtext">Nothing left that fits this stage for you four.</div><div class="muted">Move to the next stage, switch the source to include generated dares, or tick more kit.</div>`;
+    ctl = `<button class="btn hot big" onclick="skipStage()">Next stage</button>`;
+  } else if (night.phase === 'end') {
+    html = `<div class="dtitle">That's the night</div><div class="dtext">Swap back. Each couple gets some time alone together.</div><div class="muted">Tomorrow, ask each other: favourite moment? Anything to skip next time?</div>`;
+    ctl = `<button class="btn" onclick="night = newNight(); renderParty()">New night</button>`;
+  }
+  $('#stage').innerHTML = html;
+  $('#controls').innerHTML = ctl;
+  if (night.phase === 'dare') renderTimer();
+  const s = night.stats;
+  const plays = Object.entries(s.plays).filter(([, c]) => c > 0).map(([n, c]) => `<div class="stat"><span>${E.esc(n)}</span><span>${c}</span></div>`).join('');
+  const kinds = Object.entries(s.kinds).filter(([, c]) => c > 0).map(([k, c]) => `${E.KINDS[k] || k} ${c}`).join(' · ');
+  const pairs = Object.entries(s.pairs).filter(([, c]) => c > 0).map(([k, c]) => `${k.replace('|', ' & ')} ${c}`).join(' · ');
+  $('#tally').innerHTML = plays ? plays + `<div style="margin-top:8px">${kinds}</div><div>${E.esc(pairs)}</div>` : 'Nothing yet.';
+}
+
+// =================== COUPLES ===================
+function renderCouples() {
+  const opts = (g, sel) => players.filter((p) => !g || p.gender === g || p.gender === 'X').map((p) => `<option ${p.name === sel ? 'selected' : ''}>${E.esc(p.name)}</option>`).join('');
+  $('#coupleList').innerHTML = couples.map((c, i) => `
+    <div class="card"><label class="h">Couple ${i + 1}</label>
+      <div class="row">
+        <select onchange="couples[${i}].members[0]=this.value; save(); renderParty()">${opts('', c.members[0])}</select> &amp;
+        <select onchange="couples[${i}].members[1]=this.value; save(); renderParty()">${opts('', c.members[1])}</select>
+        <select onchange="couples[${i}].swap=+this.value; save(); renderParty()">${E.SWAP_LEVELS.map((l, v) => `<option value="${v}" ${+c.swap === v ? 'selected' : ''}>${l}</option>`).join('')}</select>
+      </div></div>`).join('');
+}
+function renderPlayers() {
+  $('#playerList').innerHTML = players.map((p, i) => `
+    <div class="card">
+      <div class="row">
+        <input type="text" value="${E.esc(p.name)}" onchange="renamePlayer(${i}, this.value)">
+        <select onchange="players[${i}].gender=this.value; save()">
+          ${[['M', 'Man'], ['F', 'Woman'], ['X', 'Other']].map(([v, l]) => `<option value="${v}" ${p.gender === v ? 'selected' : ''}>${l}</option>`).join('')}
+        </select>
+        <input type="color" value="${p.color}" onchange="players[${i}].color=this.value; save()">
+        <button class="btn" onclick="removePlayer(${i})">Remove</button>
+      </div>
+      <label class="h">Up for direct contact with</label>
+      <div class="chips">${players.map((o, j) => o === p ? '' : `<label class="chip"><input type="checkbox" ${p.partners.includes(o.name) ? 'checked' : ''} onchange="toggle(players[${i}].partners, players[${j}].name, this.checked)">${E.esc(o.name)}</label>`).join('')}</div>
+      <label class="h">Hard limits (never cast me in…)</label>
+      <div class="chips">${LIMIT_TAGS.map((t) => `<label class="chip"><input type="checkbox" ${p.limits.includes(t) ? 'checked' : ''} onchange="toggle(players[${i}].limits, '${t}', this.checked)">${t}</label>`).join('')}</div>
+    </div>`).join('');
+}
+function toggle(arr, v, on) { const i = arr.indexOf(v); if (on && i < 0) arr.push(v); if (!on && i >= 0) arr.splice(i, 1); save(); }
+function renamePlayer(i, name) {
+  const old = players[i].name; name = name.trim() || old;
+  if (name !== old && byName(name)) { alert('Someone already has that name.'); return renderPlayers(); }
+  players.forEach((p) => { p.partners = p.partners.map((n) => (n === old ? name : n)); });
+  couples.forEach((c) => { c.members = c.members.map((n) => (n === old ? name : n)); });
+  players[i].name = name; save(); renderPlayers(); renderCouples(); renderParty();
+}
+function addPlayer() {
+  let n = players.length + 1; while (byName('Player ' + n)) n++;
+  players.push({ name: 'Player ' + n, gender: 'X', color: COLORS[players.length % COLORS.length], partners: [], limits: [] });
+  save(); renderPlayers(); renderCouples();
+}
+function removePlayer(i) {
+  const gone = players[i].name; players.splice(i, 1);
+  players.forEach((p) => { p.partners = p.partners.filter((n) => n !== gone); });
+  save(); renderPlayers(); renderCouples();
+}
+
+// =================== KIT ===================
+function renderKit() {
+  const chips = (list, key) => list.map((x) => `<label class="chip"><input type="checkbox" ${kit[key].includes(x) ? 'checked' : ''} onchange="toggle(kit.${key}, '${x}', this.checked)">${x}</label>`).join('');
+  $('#propChips').innerHTML = chips(E.PROPS, 'props');
+  $('#placeChips').innerHTML = chips(E.PLACES, 'places');
+}
+
+// =================== DARE ROWS ===================
+function dareRow(d, extra = '') {
+  const R = rules();
+  const block = E.blocker(d, players, kit, R);
+  const c = block ? null : E.castings(d, players, null, R)[0];
+  const kind = c ? E.kindOf(d, c, R) : '';
+  return `<div class="dare">
+    <div>${kind ? `<span class="kind">${E.KINDS[kind]}</span> ` : ''}${d.title ? `<b class="t">${E.esc(d.title)}</b> · ` : ''}${c ? E.render(d, c, true, R) : E.esc(d.text)}</div>
+    <div><span class="tag">L${d.intensity}</span><span class="tag">${['', 'clothed', 'underwear', 'naked'][d.clothing]}</span>
+      ${d.tags.map((t) => `<span class="tag">${t}</span>`).join('')}${d.props.map((p) => `<span class="tag prop">${p}</span>`).join('')}${d.places.map((p) => `<span class="tag prop">${p}</span>`).join('')}</div>
+    ${block ? `<div class="warn">Unplayable now: ${E.esc(block)}</div>` : ''}
+    ${(d.warnings || []).map((w) => `<div class="warn">⚠ ${E.esc(w)}</div>`).join('')}
+    ${extra}</div>`;
+}
+
+// =================== GENERATE ===================
+$('#gKind').innerHTML += Object.entries(E.KINDS).filter(([k]) => k !== 'trio').map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+function showGen() {
+  $('#genList').innerHTML = generated.length ? generated.map((d, i) => dareRow(d, `<button class="btn" style="padding:2px 10px;margin-top:4px" onclick="keep(${i})">Add to deck</button>`)).join('')
+    : '<span class="muted">Nothing fits: try another level or kind, tick more kit, or check the swap levels.</span>';
+}
+function runGen() {
+  generated = E.generate({ intensity: +$('#gLevel').value, clothing: +$('#gCloth').value, count: +$('#gCount').value, kind: $('#gKind').value || undefined, kit, players, rules: rules(), exclude: new Set(deck.map((d) => d.id)) });
+  $('#gInfo').textContent = `The grammar can build ${E.generateAll().length.toLocaleString()} distinct dares from ${E.ACTS.length} building blocks.`;
+  showGen();
+}
+function runNight() {
+  generated = E.generateNight(STAGES, players, kit, rules()).filter((d) => !deck.some((x) => x.id === d.id));
+  $('#gInfo').textContent = `A night's worth: ${generated.length} dares across ${STAGES.map((s) => s.name).join(', ')}.`;
+  showGen();
+}
+function keep(i) { const d = generated[i]; if (d && !deck.some((x) => x.id === d.id)) { deck.push(d); save(); } generated.splice(i, 1); showGen(); }
+function keepAll() { generated.forEach((d) => { if (!deck.some((x) => x.id === d.id)) deck.push(d); }); generated = []; save(); $('#genList').innerHTML = '<span class="muted">Added to deck.</span>'; }
+
+// =================== DECK ===================
+$('#file').addEventListener('change', (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { try { deck = E.normalizeDeck(JSON.parse(r.result)); save(); renderDeck(); } catch (err) { alert('Could not read that file: ' + err.message); } };
+  r.readAsText(f); e.target.value = '';
+});
+['#fLevel', '#fCloth', '#fShow', '#fText'].forEach((s) => $(s).addEventListener('input', renderDeck));
+function renderDeck() {
+  const R = rules();
+  const L = $('#fLevel').value, Cl = $('#fCloth').value, S = $('#fShow').value, q = $('#fText').value.toLowerCase();
+  const rows = deck.filter((d) =>
+    (!L || d.intensity == L) && (!Cl || d.clothing == Cl) &&
+    (!q || (d.title + ' ' + d.text + ' ' + d.tags.join(' ') + ' ' + d.props.join(' ')).toLowerCase().includes(q)) &&
+    (S !== 'blocked' || E.blocker(d, players, kit, R)) && (S !== 'warn' || (d.warnings || []).length) && (S !== 'generated' || d.source === 'generated'));
+  $('#deckCount').textContent = deck.length ? `${deck.length} dares · showing ${rows.length}` : '';
+  $('#deckList').innerHTML = !deck.length ? '<span class="muted">Load your dares.json. Original-format files are converted automatically. You can also play on generated dares alone.</span>' :
+    rows.slice(0, 300).map((d) => dareRow(d, `<button class="btn" style="padding:2px 10px;margin-top:4px" onclick="removeDare('${E.esc(d.id)}')">Remove</button>`)).join('');
+}
+function removeDare(id) { deck = deck.filter((d) => d.id !== id); save(); renderDeck(); }
+function download(name, data) {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+  const a = Object.assign(document.createElement('a'), { href: url, download: name });
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+function exportV1() {
+  const ok = deck.filter(E.v1Compatible);
+  download('dares.json', ok.map((d, i) => E.toV1(d, i + 1)));
+  if (ok.length < deck.length) alert(`${deck.length - ok.length} couple-aware dares (spouse watching/choosing, mirror swaps) were left out: the original game can't tell who's married to whom.`);
+}
+function exportV2() { download('dares.v2.json', deck.map(({ warnings, ...d }) => d)); }
+
+renderParty(); renderCouples(); renderPlayers(); renderKit(); renderDeck();
+if (!deck.length) fetch('dares.json').then((r) => (r.ok ? r.json() : Promise.reject())).then((j) => { deck = E.normalizeDeck(j); save(); renderDeck(); }).catch(() => {});
+</script>
+</body>
+</html>
